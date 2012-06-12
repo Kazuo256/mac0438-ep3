@@ -2,9 +2,11 @@
 #ifndef EP3_MUTEX_H_
 #define EP3_MUTEX_H_
 
-#include <semaphore.h>
+//#include <semaphore.h>
 
 namespace ep3 {
+
+class Semaph;
 
 class Mutex {
   public:
@@ -20,11 +22,12 @@ class Mutex {
     Mutex ();
     ~Mutex ();
     void lock ();
-    void try_lock ();
+    //void try_lock ();
     void unlock ();
   private:
     friend class Lock;
-    pthread_mutex_t mutex_;
+    //pthread_mutex_t mutex_;
+    Semaph *mutex_;
     Mutex (const Mutex&);
     Mutex& operator = (const Mutex&);
 };
