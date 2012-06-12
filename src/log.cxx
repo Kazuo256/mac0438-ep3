@@ -6,7 +6,7 @@ namespace ep3 {
 using std::string;
 
 unsigned  Log::flags_;
-//Mutex     Log::mutex_;
+Mutex     Log::mutex_;
 
 string itos (int i) {
   char buffer[32];
@@ -21,7 +21,7 @@ string utos (unsigned i) {
 }
 
 Log& Log::out (const string& text) {
-  //Mutex::Lock lock(mutex_);
+  Mutex::Lock lock(mutex_);
   fputs(text.c_str(), output_);
   fputc(10, output_);
   fflush(output_);
@@ -48,5 +48,5 @@ void Log::enable_warning () {
   flags_ |= warning_flag();
 }
 
-} // namespace ep2
+} // namespace ep3
 
