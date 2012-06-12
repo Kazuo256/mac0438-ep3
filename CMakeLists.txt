@@ -15,6 +15,8 @@ add_executable (ep3
   src/ep3.cxx
   src/log.cxx
   src/monitor.cxx
+  src/thread.cxx
+  src/semaph.cxx
 )
 
 target_link_libraries (ep3 m ${CMAKE_THREAD_LIBS_INIT})
