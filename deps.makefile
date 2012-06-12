@@ -5,4 +5,4 @@
 .temp/main.o: src/main.cxx src/ep3.h src/log.h src/mutex.h src/thread.h
 .temp/log.o: src/log.cxx src/log.h src/mutex.h
 .temp/semaph.o: src/semaph.cxx src/semaph.h src/log.h src/mutex.h
-.temp/monitor.o: src/monitor.cxx src/monitor.h
+.temp/monitor.o: src/monitor.cxx src/monitor.h src/semaph.h
