@@ -20,7 +20,7 @@ string utos (unsigned i) {
   return buffer;
 }
 
-Log& Log::out (const string& text) {
+Log& Log::line (const string& text) {
   Mutex::Lock lock(mutex_);
   fputs(text.c_str(), output_);
   fputc(10, output_);
@@ -30,13 +30,13 @@ Log& Log::out (const string& text) {
 
 Log& Log::debug (const string& text) {
   return (flags_ & debug_flag())
-    ? out("[DEBUG] " + text)
+    ? line("[DEBUG] " + text)
     : *this;
 }
 
 Log& Log::warn (const string& text) {
   return (flags_ & warning_flag())
-    ? out("[WARNING] " + text)
+    ? line("[WARNING] " + text)
     : *this;
 }
 

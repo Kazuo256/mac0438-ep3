@@ -15,7 +15,7 @@ std::string utos (unsigned i);
 class Log {
   public:
     explicit Log (FILE *output = stdout) : output_(output) {}
-    Log& out (const std::string& text = std::string());
+    Log& line (const std::string& text = std::string());
     Log& debug (const std::string& text = std::string());
     Log& warn (const std::string& text = std::string());
     static void enable_debug ();
