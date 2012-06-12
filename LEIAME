@@ -1,0 +1,100 @@
+
+MAC0438-2012: Programação Concorrente.
+Terceiro Exercício-Programa: Simulação de Montanha-Russa
+
+Alunos:                     Nº USP:
+  Thiago de Gouveia Nunes     6797289
+  Wilson Kazuo Mizutani       6797230
+
+I. Organização dos arquivos.
+
+  Nosso EP deve apresentar a seguinte organização de arquivos e pastas:
+
+    ep2-thiago-wilson/
+    |- Makefile
+    |- objs.makefile
+    |- deps.makefile
+    |- CMakeLists.txt
+    |- alternative_build.sh
+    |- LEIAME
+    |- relatório.pdf
+    |- src/
+    |  |- main.cxx
+    |  |- ...demais arquivos de código fonte...
+      
+
+II. Compilação.
+
+  O programa vem com um Makefile que, na maioria dos casos, deve ser o
+suficiente para compilar o EP com o comando:
+
+  $ make
+
+  Mas encontramos alguns casos (como o Ubuntu 12.4 em algumas máquinas) nos
+quais a biblioteca PTHREAD não está no lugar usual no sistema. Para isso,
+fizemos um CMake (www.cmake.org) que é capaz de encontrar a biblioteca PTHREAD
+no sistema e gerar um Makefile apropriado. Para usá-lo, basta ter o cmake (2.8+)
+instalado e rodar o seguinte comando a partir da raiz do projeto:
+
+  $ ./alternative_build.sh
+
+  Isso efetivamente cria uma parta build/ na raiz que conterá arquivos internos
+usados na compilação. Ela pode ser posteriormente removida sem problemas. Talvez
+seja necessário conferir permissão de execução ao script "alternative_build.sh".
+  Esperamos que não seja necessário usar essa alternativa.
+
+III. Ferramentas usadas.
+
+  Nosso Exercício-Programa foi escrito em C++ padrão, usando vários headers da
+STL convencional, a biblioteca PTHREAD para programação concorrente, e o header
+<unistd.h> para acessar o número de processadores disponíveis do sistema. Ou
+seja, assumimos que nosso programa será compilado e executado em um ambiente
+Linux. Em particular, o programa foi testado na Rede Linux do IME, e tanto
+compilou sem erros como executou corretamente usando o Makefile padrão que vem
+com o nosso código fonte.
+
+IV. Modo de uso do programa.
+
+  Nosso programa segue a seguinte assinatura de linha de comando:
+
+    ./ep2 [--debug] [--warning] <f> <m> <C>
+
+  Legenda:
+
+    [*]       Argumento opcional.
+
+    <*>       Argumento obrigatório.
+
+    --debug   Ativa modo de depuração, no qual várias mensagens contendo
+              informações internas são exibidas durante a execução do programa.
+              Isso inclui as mensagens exigidas pelo enunciado.
+
+    --warning Ativa o modo de alerta, no qual mensagens de alerta ou perigo são
+              exibidas em situações extremas (como falha na criação das
+              threads).
+
+    f         (float) Taxa de chegada dos passageiros.
+
+    m         (unsigned int) Número de carros na montanha russa.
+
+    C         (unsigned int) Capacidade dos carros da montanha russa.
+
+
+V. Implementação da barreira simétrica.
+
+  O algoritmo da barreira simétrica usada no nosso EP se encontra no método
+Barrier::synchronize(id) da classe Barrier. Sua declaração está no arquivo
+src/barrier.h, linha 17, e sua implementação no arquivo src/barrier.cxx, linhas
+43 a 51.
+  Maiores informações sobre a implmentação usada podem ser encontradas no
+relatório.
+
+
+
+
+
+
+
+
+
+
