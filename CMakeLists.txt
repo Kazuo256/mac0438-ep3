@@ -13,6 +13,7 @@ endif ()
 add_executable (ep3
   src/main.cxx
   src/ep3.cxx
+  src/log.cxx
 )
 
 target_link_libraries (ep3 m ${CMAKE_THREAD_LIBS_INIT})
