@@ -1,4 +1,5 @@
 PROG_NAME = ep3
+FLAGS = -lpthread
 
 SRC_DIR = src
 OBJ_DIR = .temp
