@@ -16,6 +16,8 @@ class Monitor {
   protected:
     typedef int           CondVar; // TODO
     Monitor ();
+    void start_procedure ();
+    void end_procedure ();
     bool empty (const CondVar& cv) const;
     void wait (CondVar& cv, Rank rank = MAXRANK);
     void signal (CondVar& cv);
