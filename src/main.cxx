@@ -12,9 +12,7 @@ using ep3::Thread;
 int main (int argc, char** argv) {
   if (!ep3::init(argc, argv)) {
     Log().out("Failed to initialize program. Exiting.");
-    Thread::exit();
-  }
-  ep3::run();
+  } else ep3::run();
   Thread::exit();
   // never reaches here
   return EXIT_FAILURE;
