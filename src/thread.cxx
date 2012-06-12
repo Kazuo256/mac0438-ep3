@@ -22,7 +22,7 @@ void Thread::join () {
     return;
   }
   if (pthread_join(thread_, NULL))
-    Log().warn("Something bad happed.");
+    Log().warn("Something bad happend.");
 }
 
 void Thread::exit () {
