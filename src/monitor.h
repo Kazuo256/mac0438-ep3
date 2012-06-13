@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <queue>
+#include <map>
 
 #include "thread.h"
 #include "mutex.h"
@@ -14,12 +15,14 @@ class Semaph;
 
 class Monitor {
   public:
+    void drop (Thread* thread);
   protected:
     typedef unsigned char       Rank;
-    typedef std::queue<Thread*>  CondVar;
+    typedef std::queue<Thread*> CondVar;
     struct RankedCondVar;
     Mutex mutex_;
     Monitor (Rank range);
+    virtual ~Monitor ();
     // Basic monitor operations. MUST be called with the monitor locked.
     bool empty (const CondVar& cv) const;
     bool empty (const RankedCondVar& cv) const;
@@ -32,9 +35,12 @@ class Monitor {
     Rank minrank (const RankedCondVar& cv) const;
     static const Rank MAXRANK = static_cast<Rank>(-1);
   private:
-    const Rank range_;
+    typedef std::map<Thread*, Semaph*> SemMap;
+    const Rank    range_;
+    static SemMap monitoring_map_;
     Monitor (const Monitor&);
     Monitor& operator = (const Monitor&);
+    Semaph* get_semaph (Thread* thread);
 };
 
 struct Monitor::RankedCondVar {
