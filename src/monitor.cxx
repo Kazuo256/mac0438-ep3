@@ -5,14 +5,15 @@
 
 namespace ep3 {
 
-Monitor::Monitor () {}
+Monitor::Monitor (Rank range) :
+ range_(range) {}
 
 bool Monitor::empty (const CondVar& cv) const {
   return cv.empty();
 }
 
 bool Monitor::empty (const RankedCondVar& cv) const {
-  return cv.minrank > Thread::MAX_RANK;
+  return cv.minrank > range_;
 }
 
 void Monitor::wait (CondVar& cv) {
