@@ -16,6 +16,7 @@ add_executable (ep3
   src/log.cxx
   src/monitor.cxx
   src/thread.cxx
+  src/mutex.cxx
   src/semaph.cxx
 )
 

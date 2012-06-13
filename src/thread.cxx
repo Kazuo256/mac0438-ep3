@@ -13,7 +13,7 @@ void Thread::run (void *arg) {
   if (!running_) {
     pthread_create(&thread_, NULL, routine_, arg);
     running_ = true;
-  }
+  } else Log().warn("Attempt to run a currently active thread.");
 }
 
 void Thread::join () {
@@ -23,6 +23,10 @@ void Thread::join () {
   }
   if (pthread_join(thread_, NULL))
     Log().warn("Something bad happend.");
+}
+
+bool Thread::operator == (const Thread& rhs) const {
+  return pthread_equal(thread_, rhs.thread_);
 }
 
 void Thread::exit () {

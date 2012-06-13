@@ -5,12 +5,7 @@
 
 namespace ep3 {
 
-Monitor::Monitor () :
-  sem_(new Semaph(1)) {}
-
-Monitor::~Monitor () {
-  delete sem_;
-}
+Monitor::Monitor () {}
 
 } // namespace ep3
 

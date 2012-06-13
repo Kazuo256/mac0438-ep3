@@ -2,7 +2,9 @@
 #ifndef EP3_MONITOR_H_
 #define EP3_MONITOR_H_
 
-#include <queue>
+#include <vector>
+
+#include "mutex.h"
 
 namespace ep3 {
 
@@ -12,7 +14,6 @@ class Monitor {
   public:
     typedef unsigned char Rank;
     static const Rank     MAXRANK = -1;
-    ~Monitor ();
   protected:
     typedef int           CondVar; // TODO
     Monitor ();
@@ -24,7 +25,7 @@ class Monitor {
     void signal_all (CondVar& cv);
     Rank minrank (const CondVar& cv) const;
   private:
-    Semaph *sem_;
+    Mutex mutex_;
     Monitor (const Monitor&);
     Monitor& operator = (const Monitor&);
 };

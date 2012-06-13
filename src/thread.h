@@ -14,6 +14,7 @@ class Thread {
     bool running () const { return running_; }
     void run (void *arg);
     void join ();
+    bool operator == (const Thread& rhs) const;
     static void exit();
   private:
     bool      running_;
