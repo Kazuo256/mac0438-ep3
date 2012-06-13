@@ -15,11 +15,11 @@ class Semaph;
 class Monitor {
   public:
   protected:
-    typedef std::queue<Thread>  CondVar;
-    typedef CondVar             RankedCondVar[Thread::RANK_RANGE];
+    typedef std::queue<Thread> CondVar;
+    struct RankedCondVar;
+    Mutex mutex_;
     Monitor ();
-    void start_procedure ();
-    void end_procedure ();
+    // Basic monitor operations. MUST be called with the monitor locked.
     bool empty (const CondVar& cv) const;
     bool empty (const RankedCondVar& cv) const;
     void wait (CondVar& cv);
@@ -30,9 +30,15 @@ class Monitor {
     void signal_all (RankedCondVar& cv);
     Thread::Rank minrank (const RankedCondVar& cv) const;
   private:
-    Mutex mutex_;
     Monitor (const Monitor&);
     Monitor& operator = (const Monitor&);
+};
+
+struct Monitor::RankedCondVar {
+  CondVar       rank[Thread::RANK_RANGE];
+  Thread::Rank  minrank;
+  RankedCondVar () : minrank(Thread::MAX_RANK+1) {}
+  //CondVar& firstrank () { return rank[mninrank]; }
 };
 
 } // namespace ep3
