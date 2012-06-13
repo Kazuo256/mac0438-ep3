@@ -20,12 +20,10 @@ class Thread {
     bool running () const { return running_; }
     void run (void *arg);
     //void join ();
-    //void wakeup ();
     bool operator == (const Thread& rhs) const;
     static Thread* create (Routine routine);
     static Thread* self ();
     static void exit ();
-    //static void sleep ();
   private:
     typedef std::list<Thread*>  List;
     bool                running_;
@@ -33,7 +31,6 @@ class Thread {
     pthread_t           thread_;
     std::list<Monitor*> monitors_;
     Mutex               mutex_;
-    //Semaph    *sem_;
     static List         threads_;
     static Mutex        list_mutex_;
     Thread (Routine routine);
