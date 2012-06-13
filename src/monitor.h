@@ -16,7 +16,7 @@ class Monitor {
   public:
   protected:
     typedef unsigned char       Rank;
-    typedef std::queue<Thread>  CondVar;
+    typedef std::queue<Thread*>  CondVar;
     struct RankedCondVar;
     Mutex mutex_;
     Monitor (Rank range);
