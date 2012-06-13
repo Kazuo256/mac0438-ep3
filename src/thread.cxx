@@ -18,10 +18,9 @@ Thread::List  Thread::threads_;
 Mutex         Thread::list_mutex_;
 
 Thread::Thread (Routine routine) : 
-  running_(false), routine_(routine)/*, sem_(new Semaph(0))*/ {}
+  running_(false), routine_(routine) {}
 
 Thread::~Thread () {
-  //delete sem_;
   list<Monitor*>::iterator it;
   for (it = monitors_.begin(); it != monitors_.end(); it++)
     (*it)->drop(this);
@@ -47,10 +46,6 @@ void Thread::run (void *arg) {
 //  }
 //  if (pthread_join(thread_, NULL))
 //    Log().warn("Something bad happend.");
-//}
-
-//void Thread::wakeup () {
-//  sem_->post();
 //}
 
 bool Thread::operator == (const Thread& rhs) const {
@@ -85,14 +80,6 @@ void Thread::exit () {
   }
   pthread_exit(NULL);
 }
-
-//void Thread::sleep () {
-//  List::iterator hit = get_thread(pthread_self());
-//  if (hit != threads_.end())
-//    (*hit)->sem_->wait();
-//  else
-//    Log().warn("Tried to sleep main thread or invalid thread.");
-//}
 
 Thread::List::iterator Thread::get_thread (const pthread_t& t) {
   List::iterator it;

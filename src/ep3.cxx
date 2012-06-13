@@ -11,7 +11,6 @@ bool init (int argc, char** argv) {
 }
 
 static void* test (void* arg) {
-  //Thread::sleep();
   Log().line("Thread exiting");
   Thread::exit();
   return NULL; // never reaches here
@@ -20,9 +19,6 @@ static void* test (void* arg) {
 void run () {
   Thread *thread = Thread::create(test);
   thread->run(NULL);
-  //Log().line("Waking up thread");
-  //thread->wakeup();
-  //thread->join();
 }
 
 } // namespace ep3

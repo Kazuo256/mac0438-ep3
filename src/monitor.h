@@ -15,6 +15,7 @@ class Semaph;
 
 class Monitor {
   public:
+    // Locks itself, so DO NOT lock the monitor before calling.
     void drop (Thread* thread);
   protected:
     typedef unsigned char       Rank;
