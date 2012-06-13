@@ -22,6 +22,7 @@ void run () {
   thread->run(NULL);
   Log().line("Waking up thread");
   thread->wakeup();
+  //thread->join();
 }
 
 } // namespace ep3

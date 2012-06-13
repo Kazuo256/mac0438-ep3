@@ -11,7 +11,14 @@ namespace ep3 {
 
 using std::max;
 
-Thread::HandleList Thread::handles_;
+Thread::List Thread::threads_;
+
+Thread::Thread (Routine routine) : 
+  running_(false), routine_(routine), sem_(new Semaph(0)) {}
+
+Thread::~Thread () {
+  delete sem_;
+}
 
 void Thread::run (void *arg) {
   if (!running_) {
@@ -33,11 +40,7 @@ void Thread::join () {
 }
 
 void Thread::wakeup () {
-  HandleList::iterator hit = get_handle(thread_);
-  if (hit != handles_.end())
-    hit->second->post();
-  else
-    Log().warn("Tried to wake up invalid thread.");
+  sem_->post();
 }
 
 bool Thread::operator == (const Thread& rhs) const {
@@ -45,33 +48,32 @@ bool Thread::operator == (const Thread& rhs) const {
 }
 
 Thread* Thread::create (Routine routine) {
-  Handle handle = Handle(new Thread(routine), new Semaph(0));
-  handles_.push_back(handle);
-  return handle.first;
+  Thread *thread = new Thread(routine);
+  threads_.push_back(thread);
+  return thread;
 }
 
 void Thread::exit () {
-  HandleList::iterator hit = get_handle(pthread_self());
-  if (hit != handles_.end()) {
-    delete hit->first;
-    delete hit->second;
-    handles_.erase(hit);
+  List::iterator hit = get_thread(pthread_self());
+  if (hit != threads_.end()) {
+    delete *hit;
+    threads_.erase(hit);
   }
   pthread_exit(NULL);
 }
 
 void Thread::sleep () {
-  HandleList::iterator hit = get_handle(pthread_self());
-  if (hit != handles_.end())
-    hit->second->wait();
+  List::iterator hit = get_thread(pthread_self());
+  if (hit != threads_.end())
+    (*hit)->sem_->wait();
   else
     Log().warn("Tried to sleep main thread or invalid thread.");
 }
 
-Thread::HandleList::iterator Thread::get_handle (const pthread_t& t) {
-  HandleList::iterator it;
-  for (it = handles_.begin(); it != handles_.end(); it++)
-    if (pthread_equal(it->first->thread_, t)) break;
+Thread::List::iterator Thread::get_thread (const pthread_t& t) {
+  List::iterator it;
+  for (it = threads_.begin(); it != threads_.end(); it++)
+    if (pthread_equal((*it)->thread_, t)) break;
   return it;
 }
 
