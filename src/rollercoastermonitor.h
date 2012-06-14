@@ -8,7 +8,7 @@ namespace ep3 {
 
 class RollerCoasterMonitor : public Monitor {
   public:
-    RollerCoasterMonitor () : Monitor(1u) {}
+    RollerCoasterMonitor () : Monitor() {}
     void pegaCarona ();
     void carrega ();
     void descarrega ();

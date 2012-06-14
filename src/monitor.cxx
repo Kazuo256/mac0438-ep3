@@ -12,9 +12,6 @@ using std::min;
 
 Monitor::SemMap Monitor::monitoring_map_;
 
-Monitor::Monitor (Rank range) :
- range_(range) {}
-
 Monitor::~Monitor () {
   SemMap::iterator it;
   for (it = monitoring_map_.begin(); it != monitoring_map_.end(); it++)
@@ -37,7 +34,7 @@ bool Monitor::empty (const CondVar& cv) const {
 }
 
 bool Monitor::empty (const RankedCondVar& cv) const {
-  return cv.minrank > range_;
+  return cv.empty();
 }
 
 void Monitor::wait (CondVar& cv) {
@@ -57,17 +54,39 @@ void Monitor::wait (RankedCondVar& cv, Rank rank) {
 }
 
 void Monitor::signal (CondVar& cv) {
-  if (cv.size() > 0) {
+  if (!empty(cv)) {
     Thread *thread = cv.front();
     cv.pop();
     get_semaph(thread)->post();
   }
 }
 
+void Monitor::signal (RankedCondVar& cv) {
+  if (!empty(cv)) {
+    Thread *thread = cv.front();
+    cv.pop();
+    get_semaph(thread)->post();
+  }
+}
+
+bool Monitor::RankedCondVar::empty () const {
+  return minrank < ranks.size();
+}
+
+Thread* Monitor::RankedCondVar::front () const {
+  return ranks[minrank].front();
+}
+
 void Monitor::RankedCondVar::push (Thread *thread, Rank rank) {
-  rank = min(static_cast<size_t>(rank), ranks.size());
+  rank = min(static_cast<size_t>(rank), ranks.size()-1);
   ranks[rank].push(thread);
   minrank = min(minrank, rank);
+}
+
+void Monitor::RankedCondVar::pop () {
+  ranks[minrank].pop();
+  while (minrank < ranks.size() && ranks[minrank].size())
+    minrank++;
 }
 
 Semaph* Monitor::get_semaph (Thread* thread) {

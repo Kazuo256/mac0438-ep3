@@ -20,9 +20,9 @@ class Monitor {
   protected:
     typedef unsigned char       Rank;
     typedef std::queue<Thread*> CondVar;
-    struct RankedCondVar;
+    class                       RankedCondVar;
     Mutex mutex_;
-    Monitor (Rank range);
+    Monitor () {}
     virtual ~Monitor ();
     // Basic monitor operations. MUST be called with the monitor locked.
     bool empty (const CondVar& cv) const;
@@ -37,21 +37,25 @@ class Monitor {
     static const Rank MAXRANK = static_cast<Rank>(-1);
   private:
     typedef std::map<Thread*, Semaph*> SemMap;
-    const Rank    range_;
     static SemMap monitoring_map_;
     Monitor (const Monitor&);
     Monitor& operator = (const Monitor&);
     Semaph* get_semaph (Thread* thread);
 };
 
-struct Monitor::RankedCondVar {
-  std::vector<CondVar>  ranks;
-  Rank                  minrank;
-  RankedCondVar (Rank range) :
-    ranks(range, CondVar()),
-    minrank(range) {}
-  //CondVar& firstrank () { return rank[mninrank]; }
-  void push (Thread *thread, Rank rank);
+class Monitor::RankedCondVar {
+  public:
+    RankedCondVar (Rank range) :
+      ranks(range, CondVar()),
+      minrank(range) {}
+    //CondVar& firstrank () { return rank[mninrank]; }
+    bool empty () const;
+    Thread* front () const;
+    void push (Thread *thread, Rank rank);
+    void pop ();
+  private:
+    std::vector<CondVar>  ranks;
+    Rank                  minrank;
 };
 
 } // namespace ep3
