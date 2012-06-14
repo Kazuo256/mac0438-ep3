@@ -23,7 +23,7 @@ class Thread {
     bool operator == (const Thread& rhs) const;
     static Thread* create (Routine routine);
     static Thread* self ();
-    static void exit ();
+    static void* exit ();
   private:
     typedef std::list<Thread*>  List;
     bool                running_;

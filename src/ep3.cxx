@@ -9,13 +9,44 @@
 
 namespace ep3 {
 
+using std::string;
 using std::auto_ptr;
 
 static auto_ptr<RollerCoasterMonitor> rc_monitor;
 
+static void help (const string& progname) {
+  Log()
+    .line("Usage:")
+    .line("\t"+progname+" [-d] [-w] <t> <m> <C>")
+    .line("See LEIAME for more information.");
+}
+
 bool init (int argc, char** argv) {
-  Log::enable_warning();
-  Log::enable_debug();
+  string progname = *argv++;
+  argc--;
+  while (argc > 0 && (*argv)[0] == '-') {
+    switch((*argv)[1]) {
+      case 'd':
+        Log::enable_debug();
+        break;
+      case 'w':
+        Log::enable_warning();
+        break;
+      default:
+        Log().line(progname+": Invalid option -- '"+(*argv+1)+"'.");
+        help(progname);
+        return false;
+    }
+    argv++;
+    argc--;
+  }
+  if (argc < 3) {
+    Log().line(progname+": Missing parameters.");
+    help(progname);
+    return false;
+  }
+  if (Log::debug_on)    Log().debug("Debug logging activated.");
+  if (Log::warning_on)  Log().warn("Warning logging activated.");
   rc_monitor.reset(new RollerCoasterMonitor);
   return true;
 }
@@ -24,8 +55,7 @@ static void* test (void* arg) {
   static unsigned rank = 1;
   rc_monitor->testA(rank--);
   Log().line("Thread "+ptos(Thread::self())+" exiting");
-  Thread::exit();
-  return NULL; // never reaches here
+  return Thread::exit();
 }
 
 void run () {

@@ -69,7 +69,7 @@ Thread* Thread::self () {
   else return NULL;
 }
 
-void Thread::exit () {
+void* Thread::exit () {
   {
     Mutex::Lock lock(list_mutex_);
     List::iterator hit = get_thread(pthread_self());
@@ -79,6 +79,7 @@ void Thread::exit () {
     }
   }
   pthread_exit(NULL);
+  return NULL; // never reaches here
 }
 
 Thread::List::iterator Thread::get_thread (const pthread_t& t) {

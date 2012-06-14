@@ -57,7 +57,7 @@ IV. Modo de uso do programa.
 
   Nosso programa segue a seguinte assinatura de linha de comando:
 
-    ./ep2 [--debug] [--warning] <f> <m> <C>
+    ./ep2 [-d] [-w] <t> <m> <C>
 
   Legenda:
 
@@ -65,15 +65,15 @@ IV. Modo de uso do programa.
 
     <*>       Argumento obrigatório.
 
-    --debug   Ativa modo de depuração, no qual várias mensagens contendo
+    -d        Ativa modo de depuração, no qual várias mensagens contendo
               informações internas são exibidas durante a execução do programa.
               Isso inclui as mensagens exigidas pelo enunciado.
 
-    --warning Ativa o modo de alerta, no qual mensagens de alerta ou perigo são
+    -w        Ativa o modo de alerta, no qual mensagens de alerta ou perigo são
               exibidas em situações extremas (como falha na criação das
               threads).
 
-    f         (float) Taxa de chegada dos passageiros.
+    t         (float) Taxa de chegada dos passageiros.
 
     m         (unsigned int) Número de carros na montanha russa.
 
