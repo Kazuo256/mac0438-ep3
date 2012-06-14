@@ -21,8 +21,9 @@ bool init (int argc, char** argv) {
 }
 
 static void* test (void* arg) {
-  rc_monitor->testA(1);
-  Log().line("Thread exiting");
+  static unsigned rank = 1;
+  rc_monitor->testA(rank--);
+  Log().line("Thread "+ptos(Thread::self())+" exiting");
   Thread::exit();
   return NULL; // never reaches here
 }
@@ -30,14 +31,15 @@ static void* test (void* arg) {
 void run () {
   Thread *thread1 = Thread::create(test),
          *thread2 = Thread::create(test);
-  Log().line("First thread.");
+  Log().line("First thread: "+ptos(thread1));
   thread1->run(NULL);
   sleep(1);
-  Log().line("Second thread.");
+  Log().line("Second thread: "+ptos(thread2));
   thread2->run(NULL);
-  sleep(5);
+  sleep(2);
   Log().line("Wake up thread");
   rc_monitor->testB();
+  sleep(1);
   rc_monitor->testB();
 }
 
