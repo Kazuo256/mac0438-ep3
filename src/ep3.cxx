@@ -1,6 +1,7 @@
 
 #include "ep3.h"
 
+#include <cstdlib>
 #include <memory>
 
 #include "rollercoastermonitor.h"
@@ -22,8 +23,10 @@ static void help (const string& progname) {
 }
 
 bool init (int argc, char** argv) {
+  // Get program name.
   string progname = *argv++;
   argc--;
+  // Read optional parameters.
   while (argc > 0 && (*argv)[0] == '-') {
     switch((*argv)[1]) {
       case 'd':
@@ -40,14 +43,37 @@ bool init (int argc, char** argv) {
     argv++;
     argc--;
   }
+  // Check if there are enough required parameters.
   if (argc < 3) {
     Log().line(progname+": Missing parameters.");
     help(progname);
     return false;
   }
+  // Read parameter values.
+  float passenger_rate = atof(argv[0]);
+  int   car_num = atoi(argv[1]),
+        car_cap = atoi(argv[2]);
+  // Verify parameter values.
+  if (passenger_rate <= 0.0f) {
+    Log().line(progname+": The first parameter (passenger creation rate), must "
+               "be a non-zero positive floating-point number.");
+    return false;
+  }
+  if (car_num <= 0) {
+    Log().line(progname+": The second parameter (number of roller coaster cars)"
+               ", must be a positive integer number greater or equal to 1.");
+    return false;
+  }
+  if (car_cap <= 0) {
+    Log().line(progname+": The third parameter (roller coaster car capacity), "
+               "must be a positive integer number greater or equal to 1.");
+    return false;
+  }
+  // Parameters checked, prepare simulation.
+  rc_monitor.reset(new RollerCoasterMonitor);
+  // Everything ok, print some info and return success.
   if (Log::debug_on)    Log().debug("Debug logging activated.");
   if (Log::warning_on)  Log().warn("Warning logging activated.");
-  rc_monitor.reset(new RollerCoasterMonitor);
   return true;
 }
 
