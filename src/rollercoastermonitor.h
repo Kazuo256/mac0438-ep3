@@ -7,7 +7,15 @@
 namespace ep3 {
 
 class RollerCoasterMonitor : public Monitor {
-
+  public:
+    RollerCoasterMonitor () : Monitor(1u) {}
+    void pegaCarona ();
+    void carrega ();
+    void descarrega ();
+    void testA ();
+    void testB ();
+  private:
+    CondVar testcv_;
 };
 
 } // namespace ep3

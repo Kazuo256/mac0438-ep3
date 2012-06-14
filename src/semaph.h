@@ -1,6 +1,4 @@
 
-
-
 #ifndef EP3_SEMAPH_H_
 #define EP3_SEMAPH_H_
 
