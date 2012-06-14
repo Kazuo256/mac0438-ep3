@@ -12,7 +12,7 @@ class RollerCoasterMonitor : public Monitor {
     void pegaCarona ();
     void carrega ();
     void descarrega ();
-    void testA ();
+    void testA (Rank rank);
     void testB ();
   private:
     RankedCondVar testcv_;

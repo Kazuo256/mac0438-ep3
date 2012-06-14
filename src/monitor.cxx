@@ -88,7 +88,7 @@ void Monitor::RankedCondVar::push (Thread *thread, Rank rank) {
 
 void Monitor::RankedCondVar::pop () {
   ranks[minrank].pop();
-  while (minrank < ranks.size() && ranks[minrank].size())
+  while (minrank < ranks.size() && ranks[minrank].empty())
     Log().debug("Up rank "+utos(++minrank));
 }
 

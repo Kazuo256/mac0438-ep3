@@ -5,9 +5,9 @@
 
 namespace ep3 {
 
-void RollerCoasterMonitor::testA () {
+void RollerCoasterMonitor::testA (Rank rank) {
   Mutex::Lock lock(mutex_);
-  wait(testcv_,0);
+  wait(testcv_, rank);
 }
 
 void RollerCoasterMonitor::testB () {

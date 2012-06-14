@@ -21,17 +21,23 @@ bool init (int argc, char** argv) {
 }
 
 static void* test (void* arg) {
-  rc_monitor->testA();
+  rc_monitor->testA(1);
   Log().line("Thread exiting");
   Thread::exit();
   return NULL; // never reaches here
 }
 
 void run () {
-  Thread *thread = Thread::create(test);
-  thread->run(NULL);
-  sleep(2);
+  Thread *thread1 = Thread::create(test),
+         *thread2 = Thread::create(test);
+  Log().line("First thread.");
+  thread1->run(NULL);
+  sleep(1);
+  Log().line("Second thread.");
+  thread2->run(NULL);
+  sleep(5);
   Log().line("Wake up thread");
+  rc_monitor->testB();
   rc_monitor->testB();
 }
 
