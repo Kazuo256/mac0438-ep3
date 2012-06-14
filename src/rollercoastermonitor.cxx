@@ -7,7 +7,7 @@ namespace ep3 {
 
 void RollerCoasterMonitor::testA () {
   Mutex::Lock lock(mutex_);
-  wait(testcv_);
+  wait(testcv_,0);
 }
 
 void RollerCoasterMonitor::testB () {

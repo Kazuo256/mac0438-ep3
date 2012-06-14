@@ -8,14 +8,14 @@ namespace ep3 {
 
 class RollerCoasterMonitor : public Monitor {
   public:
-    RollerCoasterMonitor () : Monitor() {}
+    RollerCoasterMonitor () : Monitor(), testcv_(2) {}
     void pegaCarona ();
     void carrega ();
     void descarrega ();
     void testA ();
     void testB ();
   private:
-    CondVar testcv_;
+    RankedCondVar testcv_;
 };
 
 } // namespace ep3

@@ -3,6 +3,7 @@
 
 #include <algorithm>
 
+#include "log.h"
 #include "semaph.h"
 
 namespace ep3 {
@@ -70,7 +71,7 @@ void Monitor::signal (RankedCondVar& cv) {
 }
 
 bool Monitor::RankedCondVar::empty () const {
-  return minrank < ranks.size();
+  return minrank >= ranks.size();
 }
 
 Thread* Monitor::RankedCondVar::front () const {
@@ -78,15 +79,17 @@ Thread* Monitor::RankedCondVar::front () const {
 }
 
 void Monitor::RankedCondVar::push (Thread *thread, Rank rank) {
-  rank = min(static_cast<size_t>(rank), ranks.size()-1);
+  rank = min(rank, static_cast<Rank>(ranks.size()-1));
+  Log().debug("Pushed rank "+utos(rank));
   ranks[rank].push(thread);
   minrank = min(minrank, rank);
+  Log().debug("New minrank "+utos(minrank));
 }
 
 void Monitor::RankedCondVar::pop () {
   ranks[minrank].pop();
   while (minrank < ranks.size() && ranks[minrank].size())
-    minrank++;
+    Log().debug("Up rank "+utos(++minrank));
 }
 
 Semaph* Monitor::get_semaph (Thread* thread) {

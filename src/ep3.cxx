@@ -15,6 +15,7 @@ static auto_ptr<RollerCoasterMonitor> rc_monitor;
 
 bool init (int argc, char** argv) {
   Log::enable_warning();
+  Log::enable_debug();
   rc_monitor.reset(new RollerCoasterMonitor);
   return true;
 }
@@ -30,6 +31,7 @@ void run () {
   Thread *thread = Thread::create(test);
   thread->run(NULL);
   sleep(2);
+  Log().line("Wake up thread");
   rc_monitor->testB();
 }
 
