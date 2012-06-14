@@ -13,7 +13,11 @@ namespace ep3 {
 using std::string;
 using std::auto_ptr;
 
-static auto_ptr<RollerCoasterMonitor> rc_monitor;
+// Smart pointer to the roller coaster monitor. Automatically deletes the
+// monitor at the end of the program.
+static auto_ptr<RollerCoasterMonitor> rc_monitor(NULL);
+// Passenger creation rate.
+static float                          psg_rate = 0.01f;
 
 static void help (const string& progname) {
   Log()
@@ -50,11 +54,11 @@ bool init (int argc, char** argv) {
     return false;
   }
   // Read parameter values.
-  float passenger_rate = atof(argv[0]);
-  int   car_num = atoi(argv[1]),
-        car_cap = atoi(argv[2]);
+  psg_rate = atof(argv[0]);
+  int car_num = atoi(argv[1]),
+      car_cap = atoi(argv[2]);
   // Verify parameter values.
-  if (passenger_rate <= 0.0f) {
+  if (psg_rate <= 0.0f) {
     Log().line(progname+": The first parameter (passenger creation rate), must "
                "be a non-zero positive floating-point number.");
     return false;
@@ -70,7 +74,12 @@ bool init (int argc, char** argv) {
     return false;
   }
   // Parameters checked, prepare simulation.
-  rc_monitor.reset(new RollerCoasterMonitor);
+  rc_monitor.reset(
+    new RollerCoasterMonitor(
+      static_cast<unsigned>(car_num),
+      static_cast<unsigned>(car_cap)
+    )
+  );
   // Everything ok, print some info and return success.
   if (Log::debug_on)    Log().debug("Debug logging activated.");
   if (Log::warning_on)  Log().warn("Warning logging activated.");
