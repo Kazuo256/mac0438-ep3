@@ -56,6 +56,14 @@ void Monitor::wait (RankedCondVar& cv, Rank rank) {
   mutex_.lock();
 }
 
+void Monitor::signal (CondVar& cv) {
+  if (cv.size() > 0) {
+    Thread *thread = cv.front();
+    cv.pop();
+    get_semaph(thread)->post();
+  }
+}
+
 void Monitor::RankedCondVar::push (Thread *thread, Rank rank) {
   rank = min(static_cast<size_t>(rank), ranks.size());
   ranks[rank].push(thread);
