@@ -20,6 +20,12 @@ string utos (unsigned i) {
   return buffer;
 }
 
+string ptos (void* p) {
+  char buffer[32];
+  sprintf(buffer, "%p", p);
+  return buffer;
+}
+
 Log& Log::line (const string& text) {
   Mutex::Lock lock(mutex_);
   fputs(text.c_str(), output_);

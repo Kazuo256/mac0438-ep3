@@ -15,12 +15,15 @@ Monitor::SemMap Monitor::monitoring_map_;
 
 Monitor::~Monitor () {
   SemMap::iterator it;
-  for (it = monitoring_map_.begin(); it != monitoring_map_.end(); it++)
+  for (it = monitoring_map_.begin(); it != monitoring_map_.end(); it++) {
+    Log().debug("Droping thread "+ptos(static_cast<void*>(it->first))+".");
     delete it->second;
+  }
 }
 
 void Monitor::drop (Thread* thread) {
   Mutex::Lock lock(mutex_);
+  Log().debug("Droping thread "+ptos(static_cast<void*>(thread))+".");
   SemMap::iterator it = monitoring_map_.find(thread);
   if (it != monitoring_map_.end()) {
     delete it->second;
