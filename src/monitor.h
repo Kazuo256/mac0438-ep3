@@ -45,12 +45,13 @@ class Monitor {
 };
 
 struct Monitor::RankedCondVar {
-  std::vector<CondVar>  rank;
+  std::vector<CondVar>  ranks;
   Rank                  minrank;
   RankedCondVar (Rank range) :
-    rank(range, CondVar()),
+    ranks(range, CondVar()),
     minrank(range) {}
   //CondVar& firstrank () { return rank[mninrank]; }
+  void push (Thread *thread, Rank rank);
 };
 
 } // namespace ep3

@@ -1,11 +1,14 @@
 
 #include "monitor.h"
 
+#include <algorithm>
+
 #include "semaph.h"
 
 namespace ep3 {
 
 using std::map;
+using std::min;
 
 Monitor::SemMap Monitor::monitoring_map_;
 
@@ -27,6 +30,8 @@ void Monitor::drop (Thread* thread) {
   }
 }
 
+//===//
+
 bool Monitor::empty (const CondVar& cv) const {
   return cv.empty();
 }
@@ -36,9 +41,25 @@ bool Monitor::empty (const RankedCondVar& cv) const {
 }
 
 void Monitor::wait (CondVar& cv) {
-  //Thread::ID tid = Thread::self();
-  //cv.push(t);
-  //mutex_.unlock();
+  Thread *self = Thread::self();
+  cv.push(self);
+  mutex_.unlock();
+  get_semaph(self)->wait();
+  mutex_.lock();
+}
+
+void Monitor::wait (RankedCondVar& cv, Rank rank) {
+  Thread *self = Thread::self();
+  cv.push(self, rank);
+  mutex_.unlock();
+  get_semaph(self)->wait();
+  mutex_.lock();
+}
+
+void Monitor::RankedCondVar::push (Thread *thread, Rank rank) {
+  rank = min(static_cast<size_t>(rank), ranks.size());
+  ranks[rank].push(thread);
+  minrank = min(minrank, rank);
 }
 
 Semaph* Monitor::get_semaph (Thread* thread) {
