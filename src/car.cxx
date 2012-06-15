@@ -14,8 +14,7 @@ Car::Car (RollerCoasterMonitor* monitor) :
   id_(next_id_++) {}
 
 void Car::start () {
-  Thread *t = Thread::create(&thread);
-  t->run(static_cast<void*>(this));
+  Thread::create<Car,&Car::run>()->run(static_cast<void*>(this));
 }
 
 void Car::run () {
@@ -27,11 +26,6 @@ void Car::run () {
     monitor_->finish_lap(id_);
     monitor_->descarrega();
   }
-}
-
-void* Car::thread (void* args) {
-  static_cast<Car*>(args)->run();
-  return Thread::exit();
 }
 
 } // namespace ep3

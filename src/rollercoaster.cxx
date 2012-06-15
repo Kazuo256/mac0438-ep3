@@ -36,11 +36,8 @@ void RollerCoaster::open () {
 void RollerCoaster::run () {
   Log().line("== Starting roller coaster ==");
   vector<Car>::iterator it;
-  for (it = cars.begin(); it < cars.end(); it++) {
+  for (it = cars.begin(); it < cars.end(); it++)
     it->start();
-    //Thread *thread = Thread::create(&car_thread);
-    //thread->run(static_cast<void*>(&*it));
-  }
   while (true) Thread::delay(1000.0f);
 }
 
@@ -58,24 +55,6 @@ void RollerCoaster::test () {
   sleep(1);
   monitor_->testB();
 } 
-
-//void* RollerCoaster::car_thread (void* args) {
-//  ThreadArgs *targs = static_cast<ThreadArgs*>(args);
-//  while (true) {
-//    Thread::delay(1000.0f*rand()/RAND_MAX);
-//    targs->rc->monitor_->carrega();
-//    targs->rc->monitor_->start_lap(targs->id);
-//    Thread::delay(100.0f);
-//    targs->rc->monitor_->finish_lap(targs->id);
-//    targs->rc->monitor_->descarrega();
-//  }
-//  return Thread::exit();
-//}
-//
-//void* RollerCoaster::psg_thread (void* args) {
-//  ThreadArgs *targs = static_cast<ThreadArgs*>(args);
-//  return Thread::exit();
-//}
 
 void* RollerCoaster::testthread (void* args) {
   static unsigned rank = 1;

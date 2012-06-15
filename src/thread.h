@@ -22,6 +22,8 @@ class Thread {
     //void join ();
     bool operator == (const Thread& rhs) const;
     static Thread* create (Routine routine);
+    template <class T, void (T::*method) (void)>
+    static Thread* create ();
     static Thread* self ();
     static void delay (float milis);
     static void* exit ();
@@ -39,7 +41,21 @@ class Thread {
     Thread (const Thread&);
     Thread& operator = (const Thread&);
     static List::iterator get_thread (const pthread_t& t);
+    template <class T, void (T::*method) (void)>
+    static void* method_thread (void* args);
 };
+
+template <class T, void (T::*method) (void)>
+inline Thread* Thread::create () {
+  return create(&method_thread<T,method>);
+}
+
+template <class T, void (T::*method) (void)>
+inline void* Thread::method_thread (void* args) {
+  T *obj = static_cast<T*>(args);
+  (obj->*method) ();
+  return Thread::exit();
+}
 
 } // namespace ep3
 

@@ -15,7 +15,6 @@ class Car {
     unsigned              id_;
     static unsigned       next_id_;
     void run ();
-    static void* thread (void* args);
 };
 
 } // namespace ep3
