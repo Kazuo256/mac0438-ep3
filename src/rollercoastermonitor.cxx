@@ -2,12 +2,14 @@
 #include "rollercoastermonitor.h"
 
 #include "mutex.h"
+#include "log.h"
 
 namespace ep3 {
 
 void RollerCoasterMonitor::start_lap (unsigned car_id) {
   Mutex::Lock lock(mutex_);
   cars_riding_.push(car_id);
+  Log().debug("Car #"+utos(car_id)+" has started a new lap.");
 }
 
 void RollerCoasterMonitor::finish_lap (unsigned car_id) {
@@ -15,6 +17,7 @@ void RollerCoasterMonitor::finish_lap (unsigned car_id) {
   while (cars_riding_.front() != car_id)
     wait(riding_order_);
   cars_riding_.pop();
+  Log().debug("Car #"+utos(car_id)+" has finished its lap.");
   signal_all(riding_order_);
 }
 

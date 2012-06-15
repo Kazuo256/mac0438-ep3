@@ -29,8 +29,6 @@ class RollerCoasterMonitor : public Monitor {
     CondVar               riding_order_;
     // Used to know the order in which the cars enter the rails.
     std::queue<unsigned>  cars_riding_;
-    // Used by the cars
-    std::vector<CondVar>  ride_rails_;
 };
 
 } // namespace ep3

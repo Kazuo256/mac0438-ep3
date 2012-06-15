@@ -12,9 +12,12 @@ class RollerCoaster {
     ~RollerCoaster ();
     void open ();
     void run ();
+    void test ();
+    static void* car_thread (void *args);
     static void* testthread (void *args);
   private:
-    RollerCoasterMonitor *monitor_;
+    RollerCoasterMonitor  *monitor_;
+    unsigned              car_num_;
 };
 
 } // namespace ep3
