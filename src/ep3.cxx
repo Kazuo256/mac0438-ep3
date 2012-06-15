@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <memory>
 
-#include "rollercoastermonitor.h"
+#include "rollercoaster.h"
 #include "thread.h"
 #include "log.h"
 
@@ -13,11 +13,11 @@ namespace ep3 {
 using std::string;
 using std::auto_ptr;
 
-// Smart pointer to the roller coaster monitor. Automatically deletes the
-// monitor at the end of the program.
-static auto_ptr<RollerCoasterMonitor> rc_monitor(NULL);
+// Smart pointer to the roller coaster. Automatically deletes the monitor at the
+// end of the program.
+static auto_ptr<RollerCoaster>  rollercoaster(NULL);
 // Passenger creation rate.
-static float                          psg_rate = 0.01f;
+static float                    psg_rate = 0.01f;
 
 static void help (const string& progname) {
   Log()
@@ -74,8 +74,8 @@ bool init (int argc, char** argv) {
     return false;
   }
   // Parameters checked, prepare simulation.
-  rc_monitor.reset(
-    new RollerCoasterMonitor(
+  rollercoaster.reset(
+    new RollerCoaster(
       static_cast<unsigned>(car_num),
       static_cast<unsigned>(car_cap)
     )
@@ -86,26 +86,8 @@ bool init (int argc, char** argv) {
   return true;
 }
 
-static void* test (void* arg) {
-  static unsigned rank = 1;
-  rc_monitor->testA(rank--);
-  Log().line("Thread "+ptos(Thread::self())+" exiting");
-  return Thread::exit();
-}
-
 void run () {
-  Thread *thread1 = Thread::create(test),
-         *thread2 = Thread::create(test);
-  Log().line("First thread: "+ptos(thread1));
-  thread1->run(NULL);
-  sleep(1);
-  Log().line("Second thread: "+ptos(thread2));
-  thread2->run(NULL);
-  sleep(2);
-  Log().line("Wake up thread");
-  rc_monitor->testB();
-  sleep(1);
-  rc_monitor->testB();
+  rollercoaster->test();
 }
 
 } // namespace ep3

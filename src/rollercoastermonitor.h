@@ -8,11 +8,9 @@ namespace ep3 {
 
 class RollerCoasterMonitor : public Monitor {
   public:
-    RollerCoasterMonitor (unsigned car_num, unsigned car_cap) :
+    RollerCoasterMonitor () :
       Monitor(),
-      testcv_(2),
-      car_num_(car_num),
-      car_cap_(car_cap) {}
+      testcv_(2) {}
     void pegaCarona ();
     void carrega ();
     void descarrega ();
@@ -20,8 +18,6 @@ class RollerCoasterMonitor : public Monitor {
     void testB ();
   private:
     RankedCondVar testcv_;
-    unsigned      car_num_,
-                  car_cap_;
 };
 
 } // namespace ep3
