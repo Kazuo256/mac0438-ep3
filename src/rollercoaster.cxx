@@ -40,8 +40,11 @@ void RollerCoaster::run () {
     car.id = i;
     car.rc = this;
     cars.push_back(car);
+  }
+  vector<ThreadArgs>::iterator it;
+  for (it = cars.begin(); it < cars.end(); it++) {
     Thread *thread = Thread::create(&car_thread);
-    thread->run(static_cast<void*>(&cars[i]));
+    thread->run(static_cast<void*>(&*it));
   }
   while (true) sleep(1);
 }

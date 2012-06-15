@@ -87,7 +87,7 @@ void Thread::halt_threads () {
   Mutex::Lock lock(list_mutex_);
   List::iterator it;
   for (it = threads_.begin(); it != threads_.end(); it++) {
-    Log().debug("Canceling thread "+utos((*it)->thread_)+".");
+    Log().debug("Canceling thread "+ptos(static_cast<void*>(&*it))+".");
     pthread_cancel((*it)->thread_);
     delete *it;
   }
