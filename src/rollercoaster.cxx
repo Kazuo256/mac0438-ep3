@@ -1,6 +1,8 @@
 
 #include "rollercoaster.h"
 
+#include <cstdlib>
+#include <ctime>
 #include <vector>
 
 #include "rollercoastermonitor.h"
@@ -30,6 +32,7 @@ struct ThreadArgs {
 static vector<ThreadArgs> cars;
 
 void RollerCoaster::open () {
+  srand(time(NULL));
   for (unsigned i = 0; i < car_num_; i++) {
     ThreadArgs car;
     car.id = i;
@@ -66,6 +69,7 @@ void RollerCoaster::test () {
 void* RollerCoaster::car_thread (void* args) {
   ThreadArgs *targs = static_cast<ThreadArgs*>(args);
   while (true) {
+    Thread::delay(1000.0f*rand()/RAND_MAX);
     targs->rc->monitor_->start_lap(targs->id);
     Thread::delay(100.0f);
     targs->rc->monitor_->finish_lap(targs->id);
