@@ -70,10 +70,17 @@ void* RollerCoaster::car_thread (void* args) {
   ThreadArgs *targs = static_cast<ThreadArgs*>(args);
   while (true) {
     Thread::delay(1000.0f*rand()/RAND_MAX);
+    targs->rc->monitor_->carrega();
     targs->rc->monitor_->start_lap(targs->id);
     Thread::delay(100.0f);
     targs->rc->monitor_->finish_lap(targs->id);
+    targs->rc->monitor_->descarrega();
   }
+  return Thread::exit();
+}
+
+void* RollerCoaster::psg_thread (void* args) {
+  ThreadArgs *targs = static_cast<ThreadArgs*>(args);
   return Thread::exit();
 }
 

@@ -13,8 +13,9 @@ class RollerCoaster {
     void open ();
     void run ();
     void test ();
-    static void* car_thread (void *args);
-    static void* testthread (void *args);
+    static void* car_thread (void* args);
+    static void* psg_thread (void* args);
+    static void* testthread (void* args);
   private:
     RollerCoasterMonitor  *monitor_;
     unsigned              car_num_;

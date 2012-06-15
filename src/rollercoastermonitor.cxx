@@ -6,6 +6,14 @@
 
 namespace ep3 {
 
+void RollerCoasterMonitor::carrega () {
+
+}
+
+void RollerCoasterMonitor::descarrega () {
+
+}
+
 void RollerCoasterMonitor::start_lap (unsigned car_id) {
   Mutex::Lock lock(mutex_);
   cars_riding_.push(car_id);
