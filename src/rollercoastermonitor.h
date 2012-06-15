@@ -24,7 +24,7 @@ class RollerCoasterMonitor : public Monitor {
     void testA (Rank rank);
     void testB ();
   private:
-    RankedCondVar         testcv_;
+    CondVar               testcv_;
     // Used to know when the car riding order has been updated.
     CondVar               riding_order_;
     // Used to know the order in which the cars enter the rails.

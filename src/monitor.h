@@ -19,21 +19,16 @@ class Monitor {
     void drop (Thread* thread);
   protected:
     typedef unsigned char       Rank;
-    typedef std::queue<Thread*> CondVar;
-    class                       RankedCondVar;
+    class                       CondVar;
     Mutex mutex_;
     Monitor () {}
     virtual ~Monitor ();
     // Basic monitor operations. MUST be called with the monitor locked.
     bool empty (const CondVar& cv) const;
-    bool empty (const RankedCondVar& cv) const;
-    void wait (CondVar& cv);
-    void wait (RankedCondVar& cv, Rank rank = MAXRANK);
+    void wait (CondVar& cv, Rank rank = MAXRANK);
     void signal (CondVar& cv);
-    void signal (RankedCondVar& cv);
     void signal_all (CondVar& cv);
-    void signal_all (RankedCondVar& cv);
-    Rank minrank (const RankedCondVar& cv) const;
+    Rank minrank (const CondVar& cv) const;
     static const Rank MAXRANK = static_cast<Rank>(-1);
   private:
     typedef std::map<Thread*, Semaph*> SemMap;
@@ -43,19 +38,20 @@ class Monitor {
     Semaph* get_semaph (Thread* thread);
 };
 
-class Monitor::RankedCondVar {
+class Monitor::CondVar {
   public:
-    RankedCondVar (Rank range) :
-      ranks(range, CondVar()),
-      minrank(range) {}
+    CondVar (Rank range = 1u) :
+      ranks_(range, std::queue<Thread*>()),
+      minrank_(range) {}
     //CondVar& firstrank () { return rank[mninrank]; }
     bool empty () const;
     Thread* front () const;
-    void push (Thread *thread, Rank rank);
+    Rank minrank () const { return minrank_; }
+    void push (Thread *thread, Rank rank = 0);
     void pop ();
   private:
-    std::vector<CondVar>  ranks;
-    Rank                  minrank;
+    std::vector< std::queue<Thread*> >  ranks_;
+    Rank                                minrank_;
 };
 
 } // namespace ep3

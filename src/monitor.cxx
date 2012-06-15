@@ -37,19 +37,7 @@ bool Monitor::empty (const CondVar& cv) const {
   return cv.empty();
 }
 
-bool Monitor::empty (const RankedCondVar& cv) const {
-  return cv.empty();
-}
-
-void Monitor::wait (CondVar& cv) {
-  Thread *self = Thread::self();
-  cv.push(self);
-  mutex_.unlock();
-  get_semaph(self)->wait();
-  mutex_.lock();
-}
-
-void Monitor::wait (RankedCondVar& cv, Rank rank) {
+void Monitor::wait (CondVar& cv, Rank rank) {
   Thread *self = Thread::self();
   cv.push(self, rank);
   mutex_.unlock();
@@ -65,39 +53,9 @@ void Monitor::signal (CondVar& cv) {
   }
 }
 
-void Monitor::signal (RankedCondVar& cv) {
-  if (!empty(cv)) {
-    Thread *thread = cv.front();
-    cv.pop();
-    get_semaph(thread)->post();
-  }
-}
-
 void Monitor::signal_all (CondVar& cv) {
   while (!empty(cv))
     signal(cv);
-}
-
-bool Monitor::RankedCondVar::empty () const {
-  return minrank >= ranks.size();
-}
-
-Thread* Monitor::RankedCondVar::front () const {
-  return ranks[minrank].front();
-}
-
-void Monitor::RankedCondVar::push (Thread *thread, Rank rank) {
-  rank = min(rank, static_cast<Rank>(ranks.size()-1));
-  Log().debug("Pushed rank "+utos(rank));
-  ranks[rank].push(thread);
-  minrank = min(minrank, rank);
-  Log().debug("New minrank "+utos(minrank));
-}
-
-void Monitor::RankedCondVar::pop () {
-  ranks[minrank].pop();
-  while (minrank < ranks.size() && ranks[minrank].empty())
-    Log().debug("Up rank "+utos(++minrank));
 }
 
 Semaph* Monitor::get_semaph (Thread* thread) {
@@ -107,6 +65,32 @@ Semaph* Monitor::get_semaph (Thread* thread) {
   else {
     return (monitoring_map_[thread] = new Semaph(0));
   }
+}
+
+Monitor::Rank Monitor::minrank (const CondVar& cv) const {
+  return cv.minrank();
+}
+
+bool Monitor::CondVar::empty () const {
+  return minrank_ >= ranks_.size();
+}
+
+Thread* Monitor::CondVar::front () const {
+  return ranks_[minrank_].front();
+}
+
+void Monitor::CondVar::push (Thread *thread, Rank rank) {
+  rank = min(rank, static_cast<Rank>(ranks_.size()-1));
+  Log().debug("Pushed rank "+utos(rank));
+  ranks_[rank].push(thread);
+  minrank_ = min(minrank_, rank);
+  Log().debug("New minrank "+utos(minrank_));
+}
+
+void Monitor::CondVar::pop () {
+  ranks_[minrank_].pop();
+  while (minrank_ < ranks_.size() && ranks_[minrank_].empty())
+    Log().debug("Up rank "+utos(++minrank_));
 }
 
 } // namespace ep3
