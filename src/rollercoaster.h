@@ -10,8 +10,9 @@ class RollerCoaster {
   public:
     RollerCoaster (unsigned car_num, unsigned car_cap);
     ~RollerCoaster ();
-    static void* testthread (void *args);
     void test ();
+    void open ();
+    static void* testthread (void *args);
   private:
     RollerCoasterMonitor *monitor_;
 };

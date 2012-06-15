@@ -16,12 +16,8 @@ RollerCoaster::~RollerCoaster () {
   delete monitor_;
 }
 
-void* RollerCoaster::testthread (void* args) {
-  static unsigned rank = 1;
-  RollerCoaster *rc = static_cast<RollerCoaster*>(args);
-  rc->monitor_->testA(rank--);
-  Log().line("Thread "+ptos(Thread::self())+" exiting");
-  return Thread::exit();
+void RollerCoaster::open () {
+
 }
 
 void RollerCoaster::test () {
@@ -38,6 +34,14 @@ void RollerCoaster::test () {
   sleep(1);
   monitor_->testB();
 } 
+
+void* RollerCoaster::testthread (void* args) {
+  static unsigned rank = 1;
+  RollerCoaster *rc = static_cast<RollerCoaster*>(args);
+  rc->monitor_->testA(rank--);
+  Log().line("Thread "+ptos(Thread::self())+" exiting");
+  return Thread::exit();
+}
 
 } // namespace ep3
 
