@@ -1,8 +1,6 @@
 
 #include "rollercoaster.h"
 
-#include <time.h>
-#include <cmath>
 #include <vector>
 
 #include "rollercoastermonitor.h"
@@ -40,13 +38,6 @@ void RollerCoaster::open () {
   }
 }
 
-static void delay (float milis) {
-  struct timespec t;
-  t.tv_sec = static_cast<time_t>(milis/1000.0f);
-  t.tv_nsec = static_cast<long>(1e6f*fmod(milis, 1000.0f));
-  nanosleep(&t, NULL);
-}
-
 void RollerCoaster::run () {
   Log().line("== Starting roller coaster ==");
   vector<ThreadArgs>::iterator it;
@@ -54,7 +45,7 @@ void RollerCoaster::run () {
     Thread *thread = Thread::create(&car_thread);
     thread->run(static_cast<void*>(&*it));
   }
-  while (true) delay(1000.0f);
+  while (true) Thread::delay(1000.0f);
 }
 
 void RollerCoaster::test () {
@@ -76,7 +67,7 @@ void* RollerCoaster::car_thread (void* args) {
   ThreadArgs *targs = static_cast<ThreadArgs*>(args);
   while (true) {
     targs->rc->monitor_->start_lap(targs->id);
-    sleep(1);
+    Thread::delay(100.0f);
     targs->rc->monitor_->finish_lap(targs->id);
   }
   return Thread::exit();

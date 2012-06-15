@@ -23,6 +23,7 @@ class Thread {
     bool operator == (const Thread& rhs) const;
     static Thread* create (Routine routine);
     static Thread* self ();
+    static void delay (float milis);
     static void* exit ();
     static void halt_threads ();
   private:

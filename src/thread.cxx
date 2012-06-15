@@ -3,7 +3,9 @@
 
 #include <cstdio>
 #include <cstring>
+#include <cmath>
 #include <algorithm>
+#include <time.h>
 
 #include "semaph.h"
 #include "monitor.h"
@@ -67,6 +69,13 @@ Thread* Thread::self () {
   if (it != threads_.end())
     return *it;
   else return NULL;
+}
+
+void Thread::delay (float milis) {
+  struct timespec t;
+  t.tv_sec = static_cast<time_t>(milis/1000.0f);
+  t.tv_nsec = static_cast<long>(1e6f*fmod(milis, 1000.0f));
+  nanosleep(&t, NULL);
 }
 
 void* Thread::exit () {
