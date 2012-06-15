@@ -83,7 +83,7 @@ void* Thread::exit () {
   return NULL; // never reaches here
 }
 
-void Thread::halt () {
+void Thread::halt_threads () {
   Mutex::Lock lock(list_mutex_);
   List::iterator it;
   for (it = threads_.begin(); it != threads_.end(); it++) {

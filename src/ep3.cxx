@@ -90,7 +90,7 @@ bool init (int argc, char** argv) {
 
 static void handle (int sig) {
   Log().line("Interruption signal captured!");
-  Thread::halt();
+  Thread::halt_threads();
   Thread::exit();
 }
 
