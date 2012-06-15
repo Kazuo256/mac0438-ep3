@@ -81,8 +81,8 @@ bool init (int argc, char** argv) {
     )
   );
   // Everything ok, print some info and return success.
-  if (Log::debug_on)    Log().debug("Debug logging activated.");
-  if (Log::warning_on)  Log().warn("Warning logging activated.");
+  if (Log::debug_on())    Log().debug("Debug logging activated.");
+  if (Log::warning_on())  Log().warn("Warning logging activated.");
   return true;
 }
 
