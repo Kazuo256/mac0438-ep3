@@ -19,7 +19,9 @@ void Passenger::start () {
 }
 
 void Passenger::run () {
-  Log().line("Passegner #"+utos(id_)+".");
+  Log().line("A wild passenger (#"+utos(id_)+") appears!");
+  monitor_->pegaCarona(id_, golden_ticket_);
+  monitor_->pegaCarona(id_, golden_ticket_);
 }
 
 } // namespace ep3

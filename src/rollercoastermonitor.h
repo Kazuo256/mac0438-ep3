@@ -14,7 +14,7 @@ class RollerCoasterMonitor : public Monitor {
     RollerCoasterMonitor () :
       Monitor(),
       testcv_(2) {}
-    void pegaCarona ();
+    void pegaCarona (unsigned psg_id, bool golden);
     void carrega ();
     void descarrega ();
     //

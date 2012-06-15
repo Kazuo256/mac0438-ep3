@@ -6,6 +6,9 @@
 
 namespace ep3 {
 
+void RollerCoasterMonitor::pegaCarona (unsigned psg_id, bool golden) {
+}
+
 void RollerCoasterMonitor::carrega () {
 
 }

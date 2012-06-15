@@ -79,15 +79,17 @@ void Thread::delay (float milis) {
 }
 
 void* Thread::exit () {
+  Thread *thread = NULL;
   {
     Mutex::Lock lock(list_mutex_);
     List::iterator hit = get_thread(pthread_self());
     if (hit != threads_.end()) {
+      thread = *hit;
       delete *hit;
       threads_.erase(hit);
     }
   }
-  Log().debug("Exiting thread "+utos(pthread_self())+".");
+  Log().debug("Exiting thread "+ptos(thread)+".");
   pthread_exit(NULL);
   return NULL; // never reaches here
 }
