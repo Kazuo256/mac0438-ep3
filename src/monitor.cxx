@@ -73,6 +73,11 @@ void Monitor::signal (RankedCondVar& cv) {
   }
 }
 
+void Monitor::signal_all (CondVar& cv) {
+  while (!empty(cv))
+    signal(cv);
+}
+
 bool Monitor::RankedCondVar::empty () const {
   return minrank >= ranks.size();
 }

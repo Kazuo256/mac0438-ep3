@@ -17,16 +17,17 @@ class RollerCoasterMonitor : public Monitor {
     void pegaCarona ();
     void carrega ();
     void descarrega ();
+    //
+    void start_lap (unsigned car_id);
+    void finish_lap (unsigned car_id);
+    //
     void testA (Rank rank);
     void testB ();
   private:
     RankedCondVar         testcv_;
-    // Used to know when a car wants to use the rails to start a new lap. May
-    // also be used to notify the "rail timer" to die when the roller coaster
-    // closes.
-    CondVar               request_rails_;
-    // Used to know the order in which the cars enter the rails. Refers to
-    // positions in ride_rails_.
+    // Used to know when the car riding order has been updated.
+    CondVar               riding_order_;
+    // Used to know the order in which the cars enter the rails.
     std::queue<unsigned>  cars_riding_;
     // Used by the cars
     std::vector<CondVar>  ride_rails_;
