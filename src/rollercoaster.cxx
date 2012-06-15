@@ -16,27 +16,23 @@ using std::vector;
 
 RollerCoaster::RollerCoaster (unsigned car_num, unsigned car_cap) :
   monitor_(new RollerCoasterMonitor),
-  car_num_(car_num) {
-
-}
+  car_num_(car_num) {}
 
 RollerCoaster::~RollerCoaster () {
   Log().debug("Cleaning roller coaster resources...");
   delete monitor_;
 }
 
-static vector<Car> cars;
-
 void RollerCoaster::open () {
   srand(time(NULL));
   for (unsigned i = 0; i < car_num_; i++)
-    cars.push_back(Car(monitor_));
+    cars_.push_back(Car(monitor_));
 }
 
 void RollerCoaster::run () {
   Log().line("== Starting roller coaster ==");
   vector<Car>::iterator it;
-  for (it = cars.begin(); it < cars.end(); it++)
+  for (it = cars_.begin(); it < cars_.end(); it++)
     it->start();
   while (true) Thread::delay(1000.0f);
 }

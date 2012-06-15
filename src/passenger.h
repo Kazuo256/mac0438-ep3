@@ -4,8 +4,17 @@
 
 namespace ep3 {
 
-class Passenger {
+class RollerCoasterMonitor;
 
+class Passenger {
+  public:
+    Passenger (RollerCoasterMonitor* monitor);
+    void start ();
+  private:
+    RollerCoasterMonitor  *monitor_;
+    unsigned              id_;
+    bool                  golden_ticket_;
+    void run ();
 };
 
 } // namespace ep3

@@ -2,9 +2,12 @@
 #ifndef EP3_ROLLERCOASTER_H_
 #define EP3_ROLLERCOASTER_H_
 
+#include <vector>
+
 namespace ep3 {
 
 class RollerCoasterMonitor;
+class Car;
 
 class RollerCoaster {
   public:
@@ -19,6 +22,7 @@ class RollerCoaster {
   private:
     RollerCoasterMonitor  *monitor_;
     unsigned              car_num_;
+    std::vector<Car>      cars_;
 };
 
 } // namespace ep3
