@@ -8,6 +8,7 @@
 #include "rollercoastermonitor.h"
 #include "thread.h"
 #include "log.h"
+#include "car.h"
 
 namespace ep3 {
 
@@ -24,29 +25,21 @@ RollerCoaster::~RollerCoaster () {
   delete monitor_;
 }
 
-struct ThreadArgs {
-  unsigned      id;
-  RollerCoaster *rc;
-};
-
-static vector<ThreadArgs> cars;
+static vector<Car> cars;
 
 void RollerCoaster::open () {
   srand(time(NULL));
-  for (unsigned i = 0; i < car_num_; i++) {
-    ThreadArgs car;
-    car.id = i;
-    car.rc = this;
-    cars.push_back(car);
-  }
+  for (unsigned i = 0; i < car_num_; i++)
+    cars.push_back(Car(monitor_));
 }
 
 void RollerCoaster::run () {
   Log().line("== Starting roller coaster ==");
-  vector<ThreadArgs>::iterator it;
+  vector<Car>::iterator it;
   for (it = cars.begin(); it < cars.end(); it++) {
-    Thread *thread = Thread::create(&car_thread);
-    thread->run(static_cast<void*>(&*it));
+    it->start();
+    //Thread *thread = Thread::create(&car_thread);
+    //thread->run(static_cast<void*>(&*it));
   }
   while (true) Thread::delay(1000.0f);
 }
@@ -66,23 +59,23 @@ void RollerCoaster::test () {
   monitor_->testB();
 } 
 
-void* RollerCoaster::car_thread (void* args) {
-  ThreadArgs *targs = static_cast<ThreadArgs*>(args);
-  while (true) {
-    Thread::delay(1000.0f*rand()/RAND_MAX);
-    targs->rc->monitor_->carrega();
-    targs->rc->monitor_->start_lap(targs->id);
-    Thread::delay(100.0f);
-    targs->rc->monitor_->finish_lap(targs->id);
-    targs->rc->monitor_->descarrega();
-  }
-  return Thread::exit();
-}
-
-void* RollerCoaster::psg_thread (void* args) {
-  ThreadArgs *targs = static_cast<ThreadArgs*>(args);
-  return Thread::exit();
-}
+//void* RollerCoaster::car_thread (void* args) {
+//  ThreadArgs *targs = static_cast<ThreadArgs*>(args);
+//  while (true) {
+//    Thread::delay(1000.0f*rand()/RAND_MAX);
+//    targs->rc->monitor_->carrega();
+//    targs->rc->monitor_->start_lap(targs->id);
+//    Thread::delay(100.0f);
+//    targs->rc->monitor_->finish_lap(targs->id);
+//    targs->rc->monitor_->descarrega();
+//  }
+//  return Thread::exit();
+//}
+//
+//void* RollerCoaster::psg_thread (void* args) {
+//  ThreadArgs *targs = static_cast<ThreadArgs*>(args);
+//  return Thread::exit();
+//}
 
 void* RollerCoaster::testthread (void* args) {
   static unsigned rank = 1;
