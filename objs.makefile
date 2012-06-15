@@ -1,5 +1,6 @@
 OBJS = \
     .temp/mutex.o \
+    .temp/passenger.o \
     .temp/thread.o \
     .temp/car.o \
     .temp/ep3.o \

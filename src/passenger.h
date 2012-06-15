@@ -14,6 +14,7 @@ class Passenger {
     RollerCoasterMonitor  *monitor_;
     unsigned              id_;
     bool                  golden_ticket_;
+    static unsigned       next_id_;
     void run ();
 };
 

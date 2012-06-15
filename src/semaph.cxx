@@ -1,6 +1,7 @@
 
 #include "semaph.h"
 
+#include <cerrno>
 #include "log.h"
 
 namespace ep3 {
@@ -16,8 +17,13 @@ Semaph::~Semaph () {
 }
 
 void Semaph::wait () {
-  if (sem_wait(&sem_))
-    Log().warn("Semaphore wait operation failed.");
+  int err;
+  if ((err = sem_wait(&sem_))) {
+    if (err == EINTR)
+      Log().warn("Semaphore wait interrupted.");
+    else
+      Log().warn("Semaphore wait operation failed.");
+  }
 }
 
 void Semaph::post () {

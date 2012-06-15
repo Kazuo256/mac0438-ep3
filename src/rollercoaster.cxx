@@ -9,6 +9,7 @@
 #include "thread.h"
 #include "log.h"
 #include "car.h"
+#include "passenger.h"
 
 namespace ep3 {
 
@@ -34,7 +35,11 @@ void RollerCoaster::run () {
   vector<Car>::iterator it;
   for (it = cars_.begin(); it < cars_.end(); it++)
     it->start();
-  while (true) Thread::delay(1000.0f);
+  while (true)  {
+    psgs_.push_back(Passenger(monitor_));
+    psgs_.back().start();
+    Thread::delay(1000.0f);
+  }
 }
 
 void RollerCoaster::test () {
