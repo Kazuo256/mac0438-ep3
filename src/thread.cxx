@@ -30,7 +30,6 @@ Thread::~Thread () {
 
 void Thread::run (void *arg) {
   if (!running_) {
-    Mutex::Lock lock(mutex_);
     pthread_attr_t attr;
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);

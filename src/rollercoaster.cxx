@@ -15,8 +15,11 @@ namespace ep3 {
 
 using std::vector;
 
-RollerCoaster::RollerCoaster (unsigned car_num, unsigned car_cap) :
+RollerCoaster::RollerCoaster (float psg_rate,
+                              unsigned car_num,
+                              unsigned car_cap) :
   monitor_(new RollerCoasterMonitor),
+  psg_delay_(1.0f/psg_rate),
   car_num_(car_num) {}
 
 RollerCoaster::~RollerCoaster () {
@@ -38,7 +41,7 @@ void RollerCoaster::run () {
   while (true)  {
     psgs_.push_back(Passenger(monitor_));
     psgs_.back().start();
-    Thread::delay(1000.0f);
+    Thread::delay(psg_delay_);
   }
 }
 

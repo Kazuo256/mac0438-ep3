@@ -12,7 +12,7 @@ class Passenger;
 
 class RollerCoaster {
   public:
-    RollerCoaster (unsigned car_num, unsigned car_cap);
+    RollerCoaster (float psg_rate, unsigned car_num, unsigned car_cap);
     ~RollerCoaster ();
     void open ();
     void run ();
@@ -20,6 +20,7 @@ class RollerCoaster {
     static void* testthread (void* args);
   private:
     RollerCoasterMonitor    *monitor_;
+    float                   psg_delay_;
     unsigned                car_num_;
     std::vector<Car>        cars_;
     std::vector<Passenger>  psgs_;

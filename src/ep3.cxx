@@ -16,8 +16,6 @@ using std::auto_ptr;
 // Smart pointer to the roller coaster. Automatically deletes the monitor at the
 // end of the program.
 static auto_ptr<RollerCoaster>  rollercoaster(NULL);
-// Passenger creation rate.
-static float                    psg_rate = 0.01f;
 
 static void help (const string& progname) {
   Log()
@@ -54,9 +52,9 @@ bool init (int argc, char** argv) {
     return false;
   }
   // Read parameter values.
-  psg_rate = atof(argv[0]);
-  int car_num = atoi(argv[1]),
-      car_cap = atoi(argv[2]);
+  float psg_rate = atof(argv[0]);
+  int   car_num = atoi(argv[1]),
+        car_cap = atoi(argv[2]);
   // Verify parameter values.
   if (psg_rate <= 0.0f) {
     Log().line(progname+": The first parameter (passenger creation rate), must "
@@ -76,6 +74,7 @@ bool init (int argc, char** argv) {
   // Parameters checked, prepare simulation.
   rollercoaster.reset(
     new RollerCoaster(
+      psg_rate,
       static_cast<unsigned>(car_num),
       static_cast<unsigned>(car_cap)
     )
