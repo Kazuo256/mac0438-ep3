@@ -1,6 +1,8 @@
 
 #include "rollercoaster.h"
 
+#include <time.h>
+#include <cmath>
 #include <vector>
 
 #include "rollercoastermonitor.h"
@@ -22,10 +24,6 @@ RollerCoaster::~RollerCoaster () {
   delete monitor_;
 }
 
-void RollerCoaster::open () {
-
-}
-
 struct ThreadArgs {
   unsigned      id;
   RollerCoaster *rc;
@@ -33,20 +31,30 @@ struct ThreadArgs {
 
 static vector<ThreadArgs> cars;
 
-void RollerCoaster::run () {
-  Log().line("== Starting roller coaster ==");
+void RollerCoaster::open () {
   for (unsigned i = 0; i < car_num_; i++) {
     ThreadArgs car;
     car.id = i;
     car.rc = this;
     cars.push_back(car);
   }
+}
+
+static void delay (float milis) {
+  struct timespec t;
+  t.tv_sec = static_cast<time_t>(milis/1000.0f);
+  t.tv_nsec = static_cast<long>(1e6f*fmod(milis, 1000.0f));
+  nanosleep(&t, NULL);
+}
+
+void RollerCoaster::run () {
+  Log().line("== Starting roller coaster ==");
   vector<ThreadArgs>::iterator it;
   for (it = cars.begin(); it < cars.end(); it++) {
     Thread *thread = Thread::create(&car_thread);
     thread->run(static_cast<void*>(&*it));
   }
-  while (true) sleep(1);
+  while (true) delay(1000.0f);
 }
 
 void RollerCoaster::test () {

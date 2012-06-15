@@ -1,5 +1,5 @@
 PROG_NAME = ep3
-FLAGS = -lpthread -D_GNU_SOURCE
+FLAGS = -lm -lpthread -D_GNU_SOURCE
 
 SRC_DIR = src
 OBJ_DIR = .temp

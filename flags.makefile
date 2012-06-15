@@ -1,1 +1,1 @@
-FLAGS = -lpthread -D_GNU_SOURCE
+FLAGS = -lm -lpthread -D_GNU_SOURCE
