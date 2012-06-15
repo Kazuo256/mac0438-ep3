@@ -78,8 +78,20 @@ void* Thread::exit () {
       threads_.erase(hit);
     }
   }
+  Log().debug("Exiting thread "+utos(pthread_self())+".");
   pthread_exit(NULL);
   return NULL; // never reaches here
+}
+
+void Thread::halt () {
+  Mutex::Lock lock(list_mutex_);
+  List::iterator it;
+  for (it = threads_.begin(); it != threads_.end(); it++) {
+    Log().debug("Canceling thread "+utos((*it)->thread_)+".");
+    pthread_cancel((*it)->thread_);
+    delete *it;
+  }
+  threads_.clear();
 }
 
 Thread::List::iterator Thread::get_thread (const pthread_t& t) {

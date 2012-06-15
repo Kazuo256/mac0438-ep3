@@ -13,6 +13,7 @@ RollerCoaster::RollerCoaster (unsigned car_num, unsigned car_cap) :
 }
 
 RollerCoaster::~RollerCoaster () {
+  Log().debug("Cleaning roller coaster resources...");
   delete monitor_;
 }
 
@@ -20,7 +21,7 @@ void RollerCoaster::open () {
 
 }
 
-void RollerCoaster::test () {
+void RollerCoaster::run () {
   Thread *thread1 = Thread::create(&testthread),
          *thread2 = Thread::create(&testthread);
   Log().line("First thread: "+ptos(thread1));

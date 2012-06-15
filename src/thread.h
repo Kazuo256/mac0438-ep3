@@ -24,6 +24,7 @@ class Thread {
     static Thread* create (Routine routine);
     static Thread* self ();
     static void* exit ();
+    static void halt ();
   private:
     typedef std::list<Thread*>  List;
     bool                running_;

@@ -86,8 +86,18 @@ bool init (int argc, char** argv) {
   return true;
 }
 
+#include <signal.h>
+
+static void handle (int sig) {
+  Log().line("Interruption signal captured!");
+  Thread::halt();
+  Thread::exit();
+}
+
 void run () {
-  rollercoaster->test();
+  signal(SIGINT, handle);
+  rollercoaster->open();
+  rollercoaster->run();
 }
 
 } // namespace ep3
