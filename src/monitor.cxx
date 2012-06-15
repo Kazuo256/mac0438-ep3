@@ -81,16 +81,15 @@ Thread* Monitor::CondVar::front () const {
 
 void Monitor::CondVar::push (Thread *thread, Rank rank) {
   rank = min(rank, static_cast<Rank>(ranks_.size()-1));
-  Log().debug("Pushed rank "+utos(rank));
   ranks_[rank].push(thread);
   minrank_ = min(minrank_, rank);
-  Log().debug("New minrank "+utos(minrank_));
 }
 
 void Monitor::CondVar::pop () {
   ranks_[minrank_].pop();
   while (minrank_ < ranks_.size() && ranks_[minrank_].empty())
-    Log().debug("Up rank "+utos(++minrank_));
+    minrank_++;
+    //Log().debug("Up rank "+utos(++minrank_));
 }
 
 } // namespace ep3
