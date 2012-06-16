@@ -19,12 +19,10 @@ void Car::start () {
 
 void Car::run () {
   while (true) {
-    Thread::delay(1000.0f*rand()/RAND_MAX);
-    monitor_->carrega();
-    monitor_->start_lap(id_);
+    monitor_->carrega(id_);
+    monitor_->ride(id_);
     Thread::delay(100.0f);
-    monitor_->finish_lap(id_);
-    monitor_->descarrega();
+    monitor_->descarrega(id_);
   }
 }
 

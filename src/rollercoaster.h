@@ -16,8 +16,8 @@ class RollerCoaster {
     ~RollerCoaster ();
     void open ();
     void run ();
-    void test ();
-    static void* testthread (void* args);
+    //void test ();
+    //static void* testthread (void* args);
   private:
     RollerCoasterMonitor    *monitor_;
     float                   psg_delay_;

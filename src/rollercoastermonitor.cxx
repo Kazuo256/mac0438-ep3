@@ -7,28 +7,39 @@
 
 namespace ep3 {
 
-void RollerCoasterMonitor::pegaCarona (unsigned psg_id, bool golden) {
+void RollerCoasterMonitor::pegaCarona (bool golden) {
   Mutex::Lock lock(mutex_);
+  // Warn cars that there are more passengers waiting.
+  if (empty(waiting_psgs_))
+    waiting_psgs_count_++;
+  else
+    signal(waiting_psgs_);
   // Wait for an available car.
   wait(available_car_, golden ? 0 : 1);
-  // Enter the car and wait for the lap to end.
-  signal(psg_aboard_);
-  wait(lap_end_);
+  // Wait for the ride to end.
+  wait(ride_end_);
 }
 
 void RollerCoasterMonitor::carrega (unsigned car_id) {
   Mutex::Lock lock(mutex_);
   // Make sure to be the next car to load.
-  // TODO
+  if (loading_car_)
+    wait(loading_cars_);
+  else
+    loading_car_ = true;
+  Log().debug("Car #"+utos(car_id)+" is waiting for passengers.");
   // Wait for enough passengers to arrive.
-  // TODO
-  // Wait for passengers to fully board the car.
-  for (unsigned i = 0; i < cap; i++) {
-    signal(available_car_);
-    wait(psg_aboard_);
-  }
-  cars_riding_.push(car_id);
-  Log().debug("Car #"+utos(car_id)+" has started a new lap.");
+  for (unsigned i = 0; i < car_cap_; i++)
+    if (waiting_psgs_count_ == 0)
+      wait(waiting_psgs_);
+    else
+      waiting_psgs_count_--;
+  Log().debug("Car #"+utos(car_id)+" is full.");
+  // Let the next car load.
+  if (empty(loading_cars_))
+    loading_car_ = false;
+  else
+    signal(loading_cars_);
 }
 
 void RollerCoasterMonitor::descarrega (unsigned car_id) {
@@ -38,26 +49,28 @@ void RollerCoasterMonitor::descarrega (unsigned car_id) {
     wait(riding_order_);
   cars_riding_.pop();
   Log().debug("Car #"+utos(car_id)+" has finished its lap.");
+    // Warn the others.
   signal_all(riding_order_);
   // Let the passengers leave.
-  for (unsigned i = 0; i < cap; i++)
-    signal(lap_end_);
+  for (unsigned i = 0; i < car_cap_; i++)
+    signal(ride_end_);
 }
 
-void RollerCoasterMonitor::start_lap (unsigned car_id) {
+void RollerCoasterMonitor::ride (unsigned car_id) {
+  // RIDE!
   Mutex::Lock lock(mutex_);
   cars_riding_.push(car_id);
-  Log().debug("Car #"+utos(car_id)+" has started a new lap.");
+  Log().debug("Car #"+utos(car_id)+" is now riding.");
 }
 
-void RollerCoasterMonitor::finish_lap (unsigned car_id) {
-  Mutex::Lock lock(mutex_);
-  while (cars_riding_.front() != car_id)
-    wait(riding_order_);
-  cars_riding_.pop();
-  Log().debug("Car #"+utos(car_id)+" has finished its lap.");
-  signal_all(riding_order_);
-}
+//void RollerCoasterMonitor::finish_lap (unsigned car_id) {
+//  Mutex::Lock lock(mutex_);
+//  while (cars_riding_.front() != car_id)
+//    wait(riding_order_);
+//  cars_riding_.pop();
+//  Log().debug("Car #"+utos(car_id)+" has finished its lap.");
+//  signal_all(riding_order_);
+//}
 
 //void RollerCoasterMonitor::testA (Rank rank) {
 //  Mutex::Lock lock(mutex_);

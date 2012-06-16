@@ -13,38 +13,38 @@ class Car;
 
 class RollerCoasterMonitor : public Monitor {
   public:
-    RollerCoasterMonitor () :
+    RollerCoasterMonitor (unsigned car_cap) :
       Monitor(),
-      //testcv_(2),
-      available_car_(2),
+      car_cap_(car_cap),
       waiting_psgs_count_(0),
-      next_car_(NULL) {}
-    void pegaCarona (unsigned psg_id, bool golden);
-    void carrega (std::vector<unsigned>& car_sits);
-    void descarrega ();
-    //
-    void start_lap (unsigned car_id);
-    void finish_lap (unsigned car_id);
-    //
-    //void testA (Rank rank);
-    //void testB ();
+      available_car_(2),
+      loading_car_(false) {}
+    void pegaCarona (bool golden);
+    void carrega (unsigned car_id);
+    void descarrega (unsigned car_id);
+    void ride (unsigned car_id);
   private:
-    //CondVar               testcv_;
-    // Used as a queue for the incoming passengers.
-    CondVar               available_car_;
-    // Used as a queue for the arriving cars.
-    CondVar               full_cap_;
+    unsigned              car_cap_;
+    // These two are used as a semaphore between the incoming passengers and
+    // the next car being loaded.
     unsigned              waiting_psgs_count_;
-    // Used to know when the car loading order has been updated.
-    CondVar               load_order_;
-    // Used to know the order in which the cars start to load.
-    std::vector<unsigned> psg_buffer_;
-    Car                   *next_car_;
-    ////////
-    // Used to know when the car riding order has been updated.
-    CondVar               riding_order_;
-    // Used to know the order in which the cars enter the rails.
+    CondVar               waiting_psgs_;
+    // Passengers wait for an available car, and the car lets them in according
+    // to their arrival order, but allowing the ones with golden tickets to go
+    // first. This condition variable with two ranks is responsible for all
+    // that (see constructor above).
+    CondVar               available_car_;
+    // A passenger uses this to know when the ride has ended. 
+    CondVar               ride_end_;
+    // There form yet another semaphore, though a binary one this time. It
+    // basically certifies that only one car at a time is loading passengers.
+    bool                  loading_car_;
+    CondVar               loading_cars_;
+    // These ones control the cars' order on the rails once they start riding
+    // it. The threads are delayed by time measures, so they could get messed
+    // around during their ride. The queue enforces their original order.
     std::queue<unsigned>  cars_riding_;
+    CondVar               riding_order_;
 };
 
 } // namespace ep3
