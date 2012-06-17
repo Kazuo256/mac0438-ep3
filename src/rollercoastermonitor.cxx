@@ -69,24 +69,9 @@ void RollerCoasterMonitor::ride (unsigned car_id) {
   dump(available_car_);
 }
 
-//void RollerCoasterMonitor::finish_lap (unsigned car_id) {
-//  Mutex::Lock lock(mutex_);
-//  while (cars_riding_.front() != car_id)
-//    wait(riding_order_);
-//  cars_riding_.pop();
-//  Log().debug("Car #"+utos(car_id)+" has finished its lap.");
-//  signal_all(riding_order_);
-//}
+void RollerCoasterMonitor::report () const {
 
-//void RollerCoasterMonitor::testA (Rank rank) {
-//  Mutex::Lock lock(mutex_);
-//  wait(testcv_, rank);
-//}
-//
-//void RollerCoasterMonitor::testB () {
-//  Mutex::Lock lock(mutex_);
-//  signal(testcv_);
-//}
+}
 
 } // namespace ep3
 

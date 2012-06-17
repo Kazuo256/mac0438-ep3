@@ -50,6 +50,8 @@ class RollerCoasterMonitor : public Monitor {
     // around during their ride. The queue enforces their original order.
     std::queue<unsigned>  cars_riding_;
     CondVar               riding_order_;
+    // Reports roller coaster state.
+    void report () const;
 };
 
 } // namespace ep3

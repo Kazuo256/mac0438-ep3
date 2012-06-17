@@ -114,8 +114,11 @@ void Monitor::CondVar::dump () const {
   vector< list<Thread*> >::const_iterator r_it;
   for (r_it = ranks_.begin(); r_it < ranks_.end(); r_it++) {
     list<Thread*>::const_iterator t_it;
-    for (t_it = r_it->begin(); t_it != r_it->end(); t_it++)
-      output += (*t_it)->info() + '\n';
+    unsigned                      count;
+    for (t_it = r_it->begin(), count = 0; t_it != r_it->end(); t_it++, count++)
+      output +=
+        "\t("+utos(r_it-ranks_.begin())+":"+utos(count)+")\t"+
+        (*t_it)->info() + '\n';
   }
   Log().line(output);
 }
