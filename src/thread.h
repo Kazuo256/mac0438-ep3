@@ -38,6 +38,7 @@ class Thread {
     Thread& operator = (const Thread&);
     static List::iterator get_thread (const pthread_t& t);
     static void* routine (void* args);
+    static void cleanup (void* args);
 };
 
 } // namespace ep3

@@ -85,7 +85,6 @@ void Thread::halt_threads () {
   for (it = threads_.begin(); it != threads_.end(); it++) {
     Log().debug("Canceling thread "+ptos(static_cast<void*>(&*it))+".");
     pthread_cancel((*it)->thread_);
-    delete *it;
   }
   threads_.clear();
 }
@@ -99,8 +98,14 @@ Thread::List::iterator Thread::get_thread (const pthread_t& t) {
 
 void* Thread::routine (void* args) {
   Thread *self = static_cast<Thread*>(args);
+  pthread_cleanup_push(&cleanup, args);
   self->do_run();
+  pthread_cleanup_pop(0);
   return Thread::exit();
+}
+
+void Thread::cleanup (void* args) {
+  delete static_cast<Thread*>(args);
 }
 
 } // namespace ep3
