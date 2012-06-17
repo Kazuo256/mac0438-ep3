@@ -14,11 +14,7 @@ Passenger::Passenger (RollerCoasterMonitor* monitor) :
   id_(next_id_++),
   golden_ticket_(false) {}
 
-void Passenger::start () {
-  Thread::create<Passenger,&Passenger::run>()->run(static_cast<void*>(this));
-}
-
-void Passenger::run () {
+void Passenger::do_run () {
   Log().line("Passenger (#"+utos(id_)+") appears!");
   //Thread self = Thread::self();
   //self->set_info(

@@ -1,12 +1,11 @@
 # dependencies
 .temp/mutex.o: src/mutex.cxx src/mutex.h src/semaph.h src/log.h
-.temp/passenger.o: src/passenger.cxx src/passenger.h \
- src/rollercoastermonitor.h src/monitor.h src/thread.h src/mutex.h \
- src/log.h
+.temp/passenger.o: src/passenger.cxx src/passenger.h src/thread.h \
+ src/mutex.h src/rollercoastermonitor.h src/monitor.h src/log.h
 .temp/thread.o: src/thread.cxx src/thread.h src/mutex.h src/semaph.h \
  src/monitor.h src/log.h
-.temp/car.o: src/car.cxx src/car.h src/rollercoastermonitor.h \
- src/monitor.h src/thread.h src/mutex.h
+.temp/car.o: src/car.cxx src/car.h src/thread.h src/mutex.h \
+ src/rollercoastermonitor.h src/monitor.h
 .temp/ep3.o: src/ep3.cxx src/ep3.h src/rollercoaster.h src/thread.h \
  src/mutex.h src/log.h
 .temp/rollercoaster.o: src/rollercoaster.cxx src/rollercoaster.h \

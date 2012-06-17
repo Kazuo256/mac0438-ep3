@@ -11,55 +11,34 @@
 
 namespace ep3 {
 
-//class Semaph;
 class Monitor;
 
 class Thread {
   public:
-    typedef void* (*Routine) (void*);
-    ~Thread ();
+    virtual ~Thread ();
     bool running () const { return running_; }
-    std::string info () const { return info_; }
-    void set_info (const std::string& info) { info_ = info; }
-    void run (void *arg);
-    //void join ();
-    bool operator == (const Thread& rhs) const;
-    static Thread* create (Routine routine);
-    template <class T, void (T::*method) (void)>
-    static Thread* create ();
+    virtual std::string info () const;
+    void run ();
     static Thread* self ();
     static void delay (float milis);
     static void* exit ();
     static void halt_threads ();
+  protected:
+    Thread ();
+    virtual void do_run () = 0;
   private:
     typedef std::list<Thread*>  List;
     bool                running_;
-    Routine             routine_;
     pthread_t           thread_;
     std::list<Monitor*> monitors_;
     Mutex               mutex_;
-    std::string         info_;
     static List         threads_;
     static Mutex        list_mutex_;
-    Thread (Routine routine);
     Thread (const Thread&);
     Thread& operator = (const Thread&);
     static List::iterator get_thread (const pthread_t& t);
-    template <class T, void (T::*method) (void)>
-    static void* method_thread (void* args);
+    static void* routine (void* args);
 };
-
-template <class T, void (T::*method) (void)>
-inline Thread* Thread::create () {
-  return create(&method_thread<T,method>);
-}
-
-template <class T, void (T::*method) (void)>
-inline void* Thread::method_thread (void* args) {
-  T *obj = static_cast<T*>(args);
-  (obj->*method) ();
-  return Thread::exit();
-}
 
 } // namespace ep3
 

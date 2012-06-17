@@ -25,16 +25,16 @@ RollerCoaster::RollerCoaster (float psg_rate,
 RollerCoaster::~RollerCoaster () {
   Log().debug("Cleaning roller coaster resources...");
   delete monitor_;
-  {
-    vector<Car*>::iterator it;
-    for (it = cars_.begin(); it < cars_.end(); it++)
-      delete *it;
-  }
-  {
-    vector<Passenger*>::iterator it;
-    for (it = psgs_.begin(); it < psgs_.end(); it++)
-      delete *it;
-  }
+  //{
+  //  vector<Car*>::iterator it;
+  //  for (it = cars_.begin(); it < cars_.end(); it++)
+  //    delete *it;
+  //}
+  //{
+  //  vector<Passenger*>::iterator it;
+  //  for (it = psgs_.begin(); it < psgs_.end(); it++)
+  //    delete *it;
+  //}
 }
 
 void RollerCoaster::open () {
@@ -48,10 +48,10 @@ void RollerCoaster::run () {
   Log().line("== Starting roller coaster ==");
   vector<Car*>::iterator it;
   for (it = cars_.begin(); it < cars_.end(); it++)
-    (*it)->start();
+    (*it)->run();
   while (true)  {
     psgs_.push_back(new Passenger(monitor_));
-    psgs_.back()->start();
+    psgs_.back()->run();
     Thread::delay(psg_delay_);
   }
 }

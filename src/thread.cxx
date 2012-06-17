@@ -20,8 +20,11 @@ using std::max;
 Thread::List  Thread::threads_;
 Mutex         Thread::list_mutex_;
 
-Thread::Thread (Routine routine) : 
-  running_(false), routine_(routine) {}
+Thread::Thread () : 
+  running_(false) {
+  Mutex::Lock lock(list_mutex_);
+  threads_.push_back(this);
+}
 
 Thread::~Thread () {
   list<Monitor*>::iterator it;
@@ -29,38 +32,20 @@ Thread::~Thread () {
     (*it)->drop(this);
 }
 
-void Thread::run (void *arg) {
+string Thread::info () const {
+  return "<"+ptos(static_cast<const void*>(this))+">";
+}
+
+void Thread::run () {
   if (!running_) {
     pthread_attr_t attr;
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
     running_ = true;
-    if (pthread_create(&thread_, &attr, routine_, arg)) {
+    if (pthread_create(&thread_, &attr, routine, static_cast<void*>(this))) {
       running_ = false;
     }
   } else Log().warn("Attempt to run a currently active thread.");
-}
-
-//void Thread::join () {
-//  if (!running_) {
-//    Log().warn("Attempt to join inactive thread.");
-//    return;
-//  }
-//  if (pthread_join(thread_, NULL))
-//    Log().warn("Something bad happend.");
-//}
-
-bool Thread::operator == (const Thread& rhs) const {
-  return pthread_equal(thread_, rhs.thread_);
-}
-
-Thread* Thread::create (Routine routine) {
-  Thread *thread = new Thread(routine);
-  {
-    Mutex::Lock lock(list_mutex_);
-    threads_.push_back(thread);
-  }
-  return thread;
 }
 
 Thread* Thread::self () {
@@ -110,6 +95,12 @@ Thread::List::iterator Thread::get_thread (const pthread_t& t) {
   for (it = threads_.begin(); it != threads_.end(); it++)
     if (pthread_equal((*it)->thread_, t)) break;
   return it;
+}
+
+void* Thread::routine (void* args) {
+  Thread *self = static_cast<Thread*>(args);
+  self->do_run();
+  return Thread::exit();
 }
 
 } // namespace ep3

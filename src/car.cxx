@@ -13,11 +13,7 @@ Car::Car (RollerCoasterMonitor* monitor) :
   monitor_(monitor),
   id_(next_id_++) {}
 
-void Car::start () {
-  Thread::create<Car,&Car::run>()->run(static_cast<void*>(this));
-}
-
-void Car::run () {
+void Car::do_run () {
   while (true) {
     monitor_->carrega(id_);
     monitor_->ride(id_);

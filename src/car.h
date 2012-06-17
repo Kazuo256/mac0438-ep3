@@ -2,19 +2,21 @@
 #ifndef EP3_CAR_H_
 #define EP3_CAR_H_
 
+#include "thread.h"
+
 namespace ep3 {
 
 class RollerCoasterMonitor;
 
-class Car {
+class Car : public Thread {
   public:
     Car (RollerCoasterMonitor* monitor);
-    void start ();
+  protected:
+    void do_run ();
   private:
     RollerCoasterMonitor  *monitor_;
     unsigned              id_;
     static unsigned       next_id_;
-    void run ();
 };
 
 } // namespace ep3
