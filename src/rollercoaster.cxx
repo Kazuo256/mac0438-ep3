@@ -42,8 +42,6 @@ void RollerCoaster::open () {
   vector<Car*>::iterator it;
   for (it = cars_.begin(); it < cars_.end(); it++)
     *it = new Car(monitor_);
-  //for (unsigned i = 0; i < car_num_; i++)
-  //  cars_.push_back(new Car(monitor_));
 }
 
 void RollerCoaster::run () {
