@@ -2,20 +2,25 @@
 #include "rollercoastermonitor.h"
 
 #include "car.h"
+#include "passenger.h"
 #include "mutex.h"
 #include "log.h"
 
 namespace ep3 {
 
-void RollerCoasterMonitor::pegaCarona (bool golden) {
+void RollerCoasterMonitor::pegaCarona (const Passenger* psg) {
   Mutex::Lock lock(mutex_);
   // Warn cars that there are more passengers waiting.
   if (empty(waiting_psgs_))
     waiting_psgs_count_++;
   else
     signal(waiting_psgs_);
+  // Output.
+  Log()
+    .line("## Passenger "+psg->info()+" is arriving at the queue.");
+  report();
   // Wait for an available car.
-  wait(available_car_, golden ? 0 : 1);
+  wait(available_car_, psg->golden() ? 0 : 1);
   // Wait for the ride to end.
   wait(ride_end_);
 }
@@ -51,7 +56,8 @@ void RollerCoasterMonitor::descarrega (unsigned car_id) {
   while (cars_riding_.front() != car_id)
     wait(riding_order_);
   cars_riding_.pop();
-  Log().debug("Car #"+utos(car_id)+" has finished its lap.");
+  Log()
+    .line("## Car "+utos(car_id)+" has finished its ride.");
   report();
   // Warn the others.
   signal_all(riding_order_);
@@ -64,13 +70,14 @@ void RollerCoasterMonitor::ride (unsigned car_id) {
   // RIDE!
   Mutex::Lock lock(mutex_);
   cars_riding_.push(car_id);
-  Log().debug("Car #"+utos(car_id)+" is now riding.");
+  Log()
+    .line("## Car "+utos(car_id)+" is now riding.");
   report();
 }
 
 void RollerCoasterMonitor::report () const {
   Log()
-    .line("## There are "+utos(count(available_car_))+" passengers waiting.");
+    .line("## Passengers currently waiting: "+utos(count(available_car_))+".");
   dump(available_car_);
 }
 

@@ -14,7 +14,7 @@
 .temp/main.o: src/main.cxx src/ep3.h src/log.h src/mutex.h src/thread.h
 .temp/rollercoastermonitor.o: src/rollercoastermonitor.cxx \
  src/rollercoastermonitor.h src/monitor.h src/thread.h src/mutex.h \
- src/car.h src/log.h
+ src/car.h src/passenger.h src/log.h
 .temp/log.o: src/log.cxx src/log.h src/mutex.h
 .temp/semaph.o: src/semaph.cxx src/semaph.h src/log.h src/mutex.h
 .temp/monitor.o: src/monitor.cxx src/monitor.h src/thread.h src/mutex.h \

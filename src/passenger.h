@@ -13,6 +13,7 @@ class Passenger : public Thread {
   public:
     Passenger (RollerCoasterMonitor* monitor);
     std::string info () const;
+    bool golden () const { return golden_ticket_; }
   protected:
     void do_run ();
   private:

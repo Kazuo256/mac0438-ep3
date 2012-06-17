@@ -10,6 +10,7 @@
 namespace ep3 {
 
 class Car;
+class Passenger;
 
 class RollerCoasterMonitor : public Monitor {
   public:
@@ -23,7 +24,7 @@ class RollerCoasterMonitor : public Monitor {
     // AQUI ESTÃO AS OPERAÇÕES EXIGIDAS NO  //
     // ENUNCIADO:                           //
     // <<================================>> //
-    void pegaCarona (bool golden);
+    void pegaCarona (const Passenger* psg);
     void carrega (unsigned car_id);
     void descarrega (unsigned car_id);
     void ride (unsigned car_id);
