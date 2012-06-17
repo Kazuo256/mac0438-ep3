@@ -58,6 +58,10 @@ void Monitor::signal_all (CondVar& cv) {
     signal(cv);
 }
 
+Monitor::Rank Monitor::minrank (const CondVar& cv) const {
+  return cv.minrank();
+}
+
 Semaph* Monitor::get_semaph (Thread* thread) {
   SemMap::iterator it = monitoring_map_.find(thread);
   if (it != monitoring_map_.end())
@@ -65,10 +69,6 @@ Semaph* Monitor::get_semaph (Thread* thread) {
   else {
     return (monitoring_map_[thread] = new Semaph(0));
   }
-}
-
-Monitor::Rank Monitor::minrank (const CondVar& cv) const {
-  return cv.minrank();
 }
 
 bool Monitor::CondVar::empty () const {

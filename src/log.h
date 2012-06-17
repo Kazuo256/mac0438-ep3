@@ -11,7 +11,7 @@ namespace ep3 {
 
 std::string itos (int i);
 std::string utos (unsigned i);
-std::string ptos (void* p);
+std::string ptos (const void* p);
 
 class Log {
   public:

@@ -20,7 +20,7 @@ string utos (unsigned i) {
   return buffer;
 }
 
-string ptos (void* p) {
+string ptos (const void* p) {
   char buffer[32];
   sprintf(buffer, "%p", p);
   return buffer;

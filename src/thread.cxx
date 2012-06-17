@@ -13,8 +13,9 @@
 
 namespace ep3 {
 
-using std::max;
+using std::string;
 using std::list;
+using std::max;
 
 Thread::List  Thread::threads_;
 Mutex         Thread::list_mutex_;
@@ -70,10 +71,10 @@ Thread* Thread::self () {
   else return NULL;
 }
 
-void Thread::delay (float milis) {
+void Thread::delay (float timedelay) {
   struct timespec t;
-  t.tv_sec = static_cast<time_t>(milis/1000.0f);
-  t.tv_nsec = static_cast<long>(1e6f*fmod(milis, 1000.0f));
+  t.tv_sec = static_cast<time_t>(timedelay/100.0f);
+  t.tv_nsec = static_cast<long>(1e7f*fmod(timedelay, 100.0f));
   nanosleep(&t, NULL);
 }
 

@@ -20,6 +20,10 @@ void Passenger::start () {
 
 void Passenger::run () {
   Log().line("A wild passenger (#"+utos(id_)+") appears!");
+  //Thread self = Thread::self();
+  //self->set_info(
+  //  "<passenger "+(golden_?"D":"")+utos(id_)+":0>"
+  //);
   monitor_->pegaCarona(golden_ticket_);
   monitor_->pegaCarona(golden_ticket_);
 }

@@ -29,6 +29,7 @@ class Monitor {
     void signal (CondVar& cv);
     void signal_all (CondVar& cv);
     Rank minrank (const CondVar& cv) const;
+    // Maximum possible rank.
     static const Rank MAXRANK = static_cast<Rank>(-1);
   private:
     typedef std::map<Thread*, Semaph*> SemMap;
@@ -43,7 +44,6 @@ class Monitor::CondVar {
     CondVar (Rank range = 1u) :
       ranks_(range, std::queue<Thread*>()),
       minrank_(range) {}
-    //CondVar& firstrank () { return rank[mninrank]; }
     bool empty () const;
     Thread* front () const;
     Rank minrank () const { return minrank_; }

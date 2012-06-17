@@ -3,6 +3,7 @@
 #define EP3_THREAD_H_
 
 #include <pthread.h>
+#include <string>
 #include <list>
 #include <utility>
 
@@ -18,6 +19,8 @@ class Thread {
     typedef void* (*Routine) (void*);
     ~Thread ();
     bool running () const { return running_; }
+    std::string info () const { return info_; }
+    void set_info (const std::string& info) { info_ = info; }
     void run (void *arg);
     //void join ();
     bool operator == (const Thread& rhs) const;
@@ -35,6 +38,7 @@ class Thread {
     pthread_t           thread_;
     std::list<Monitor*> monitors_;
     Mutex               mutex_;
+    std::string         info_;
     static List         threads_;
     static Mutex        list_mutex_;
     Thread (Routine routine);
