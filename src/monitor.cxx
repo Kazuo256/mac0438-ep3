@@ -8,6 +8,8 @@
 
 namespace ep3 {
 
+using std::vector;
+using std::list;
 using std::map;
 using std::min;
 
@@ -53,6 +55,15 @@ void Monitor::signal (CondVar& cv) {
   }
 }
 
+Thread* Monitor::signal_and_fetch (CondVar& cv) {
+  if (!empty(cv)) {
+    Thread *thread = cv.front();
+    cv.pop();
+    get_semaph(thread)->post();
+    return thread;
+  } else return NULL;
+}
+
 void Monitor::signal_all (CondVar& cv) {
   while (!empty(cv))
     signal(cv);
@@ -60,6 +71,10 @@ void Monitor::signal_all (CondVar& cv) {
 
 Monitor::Rank Monitor::minrank (const CondVar& cv) const {
   return cv.minrank();
+}
+
+void Monitor::dump (const CondVar& cv) const {
+  cv.dump();
 }
 
 Semaph* Monitor::get_semaph (Thread* thread) {
@@ -81,15 +96,24 @@ Thread* Monitor::CondVar::front () const {
 
 void Monitor::CondVar::push (Thread *thread, Rank rank) {
   rank = min(rank, static_cast<Rank>(ranks_.size()-1));
-  ranks_[rank].push(thread);
+  ranks_[rank].push_back(thread);
   minrank_ = min(minrank_, rank);
 }
 
 void Monitor::CondVar::pop () {
-  ranks_[minrank_].pop();
+  ranks_[minrank_].pop_front();
   while (minrank_ < ranks_.size() && ranks_[minrank_].empty())
     minrank_++;
     //Log().debug("Up rank "+utos(++minrank_));
+}
+
+void Monitor::CondVar::dump () const {
+  vector< list<Thread*> >::const_iterator r_it;
+  for (r_it = ranks_.begin(); r_it < ranks_.end(); r_it++) {
+    list<Thread*>::const_iterator t_it;
+    for (t_it = r_it->begin(); t_it != r_it->end(); t_it++)
+      Log().line((*t_it)->info());
+  }
 }
 
 } // namespace ep3

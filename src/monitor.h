@@ -3,7 +3,7 @@
 #define EP3_MONITOR_H_
 
 #include <vector>
-#include <queue>
+#include <list>
 #include <map>
 
 #include "thread.h"
@@ -28,7 +28,9 @@ class Monitor {
     void wait (CondVar& cv, Rank rank = MAXRANK);
     void signal (CondVar& cv);
     void signal_all (CondVar& cv);
+    Thread* signal_and_fetch (CondVar& cv);
     Rank minrank (const CondVar& cv) const;
+    void dump (const CondVar& cv) const;
     // Maximum possible rank.
     static const Rank MAXRANK = static_cast<Rank>(-1);
   private:
@@ -42,16 +44,17 @@ class Monitor {
 class Monitor::CondVar {
   public:
     CondVar (Rank range = 1u) :
-      ranks_(range, std::queue<Thread*>()),
+      ranks_(range, std::list<Thread*>()),
       minrank_(range) {}
     bool empty () const;
     Thread* front () const;
     Rank minrank () const { return minrank_; }
     void push (Thread *thread, Rank rank = 0);
     void pop ();
+    void dump () const;
   private:
-    std::vector< std::queue<Thread*> >  ranks_;
-    Rank                                minrank_;
+    std::vector< std::list<Thread*> > ranks_;
+    Rank                              minrank_;
 };
 
 } // namespace ep3
