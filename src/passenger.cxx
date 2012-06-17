@@ -27,7 +27,9 @@ string Passenger::info () const {
 void Passenger::do_run () {
   Log().debug(info()+" appears!");
   monitor_->pegaCarona(this);
+  ride_num_++;
   monitor_->pegaCarona(this);
+  ride_num_++;
 }
 
 } // namespace ep3
