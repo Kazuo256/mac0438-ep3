@@ -20,27 +20,40 @@ RollerCoaster::RollerCoaster (float psg_rate,
                               unsigned car_cap) :
   monitor_(new RollerCoasterMonitor(car_cap)),
   psg_delay_(1.0f/psg_rate),
-  car_num_(car_num) {}
+  cars_(car_num, NULL) {}
 
 RollerCoaster::~RollerCoaster () {
   Log().debug("Cleaning roller coaster resources...");
   delete monitor_;
+  {
+    vector<Car*>::iterator it;
+    for (it = cars_.begin(); it < cars_.end(); it++)
+      delete *it;
+  }
+  {
+    vector<Passenger*>::iterator it;
+    for (it = psgs_.begin(); it < psgs_.end(); it++)
+      delete *it;
+  }
 }
 
 void RollerCoaster::open () {
   srand(time(NULL));
-  for (unsigned i = 0; i < car_num_; i++)
-    cars_.push_back(Car(monitor_));
+  vector<Car*>::iterator it;
+  for (it = cars_.begin(); it < cars_.end(); it++)
+    *it = new Car(monitor_);
+  //for (unsigned i = 0; i < car_num_; i++)
+  //  cars_.push_back(new Car(monitor_));
 }
 
 void RollerCoaster::run () {
   Log().line("== Starting roller coaster ==");
-  vector<Car>::iterator it;
+  vector<Car*>::iterator it;
   for (it = cars_.begin(); it < cars_.end(); it++)
-    it->start();
+    (*it)->start();
   while (true)  {
-    psgs_.push_back(Passenger(monitor_));
-    psgs_.back().start();
+    psgs_.push_back(new Passenger(monitor_));
+    psgs_.back()->start();
     Thread::delay(psg_delay_);
   }
 }

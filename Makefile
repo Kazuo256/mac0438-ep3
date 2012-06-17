@@ -5,7 +5,7 @@ SRC_DIR = src
 OBJ_DIR = .temp
 
 CXX = g++
-CXXFLAGS = -ansi -Wall -O2 $(FLAGS)
+CXXFLAGS = -ansi -Wall -O0 $(FLAGS)
 
 OUTPUT = $(PROG_NAME)
 

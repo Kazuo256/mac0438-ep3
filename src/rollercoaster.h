@@ -22,8 +22,8 @@ class RollerCoaster {
     RollerCoasterMonitor    *monitor_;
     float                   psg_delay_;
     unsigned                car_num_;
-    std::vector<Car>        cars_;
-    std::vector<Passenger>  psgs_;
+    std::vector<Car*>       cars_;
+    std::vector<Passenger*> psgs_;
 };
 
 } // namespace ep3

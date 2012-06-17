@@ -34,6 +34,9 @@ void RollerCoasterMonitor::carrega (unsigned car_id) {
       wait(waiting_psgs_);
     else
       waiting_psgs_count_--;
+  //
+  for (unsigned i = 0; i < car_cap_; i++)
+    signal(available_car_);
   Log().debug("Car #"+utos(car_id)+" is full.");
   // Let the next car load.
   if (empty(loading_cars_))
