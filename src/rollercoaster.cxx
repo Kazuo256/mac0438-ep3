@@ -25,16 +25,6 @@ RollerCoaster::RollerCoaster (float psg_rate,
 RollerCoaster::~RollerCoaster () {
   Log().debug("Cleaning roller coaster resources...");
   delete monitor_;
-  //{
-  //  vector<Car*>::iterator it;
-  //  for (it = cars_.begin(); it < cars_.end(); it++)
-  //    delete *it;
-  //}
-  //{
-  //  vector<Passenger*>::iterator it;
-  //  for (it = psgs_.begin(); it < psgs_.end(); it++)
-  //    delete *it;
-  //}
 }
 
 void RollerCoaster::run () {
@@ -48,29 +38,6 @@ void RollerCoaster::run () {
     Thread::delay(psg_delay_);
   }
 }
-
-//void RollerCoaster::test () {
-//  Thread *thread1 = Thread::create(&testthread),
-//         *thread2 = Thread::create(&testthread);
-//  Log().line("First thread: "+ptos(thread1));
-//  thread1->run(static_cast<void*>(this));
-//  sleep(1);
-//  Log().line("Second thread: "+ptos(thread2));
-//  thread2->run(static_cast<void*>(this));
-//  sleep(2);
-//  Log().line("Wake up thread");
-//  monitor_->testB();
-//  sleep(1);
-//  monitor_->testB();
-//} 
-//
-//void* RollerCoaster::testthread (void* args) {
-//  static unsigned rank = 1;
-//  RollerCoaster *rc = static_cast<RollerCoaster*>(args);
-//  rc->monitor_->testA(rank--);
-//  Log().line("Thread "+ptos(Thread::self())+" exiting");
-//  return Thread::exit();
-//}
 
 } // namespace ep3
 

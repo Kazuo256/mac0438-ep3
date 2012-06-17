@@ -41,7 +41,7 @@ void RollerCoasterMonitor::carrega (Car* car) {
       waiting_psgs_count_--;
   // Let enough passengers in.
   for (unsigned i = 0; i < car_cap_; i++)
-    signal(available_car_);
+    car->add_psg(signal_and_fetch(available_car_));
   Log().debug(car->info()+" is full.");
   // Let the next car load.
   if (empty(loading_cars_))
@@ -60,8 +60,10 @@ void RollerCoasterMonitor::descarrega (Car* car) {
   // Warn the others.
   signal_all(riding_order_);
   // Let the passengers leave.
-  for (unsigned i = 0; i < car_cap_; i++)
+  for (unsigned i = 0; i < car_cap_; i++) {
+    car->drop_psg();
     signal(ride_end_);
+  }
 }
 
 void RollerCoasterMonitor::ride (Car* car) {

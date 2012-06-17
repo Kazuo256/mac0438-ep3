@@ -19,6 +19,14 @@ string Car::info () const {
   return "<car "+utos(id_)+">";
 }
 
+void Car::add_psg (const Thread* psg) {
+  psgs_.push_back(psg);
+}
+
+void Car::drop_psg () {
+  psgs_.pop_front();
+}
+
 void Car::do_run () {
   while (true) {
     monitor_->carrega(this);
