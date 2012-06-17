@@ -20,7 +20,7 @@ RollerCoaster::RollerCoaster (float psg_rate,
                               unsigned car_cap) :
   monitor_(new RollerCoasterMonitor(car_cap)),
   psg_delay_(1.0f/psg_rate),
-  cars_(car_num, NULL) {}
+  car_num_(car_num) {}
 
 RollerCoaster::~RollerCoaster () {
   Log().debug("Cleaning roller coaster resources...");
@@ -37,21 +37,14 @@ RollerCoaster::~RollerCoaster () {
   //}
 }
 
-void RollerCoaster::open () {
-  srand(time(NULL));
-  vector<Car*>::iterator it;
-  for (it = cars_.begin(); it < cars_.end(); it++)
-    *it = new Car(monitor_);
-}
-
 void RollerCoaster::run () {
+  srand(time(NULL));
   Log().line("== Starting roller coaster ==");
-  vector<Car*>::iterator it;
-  for (it = cars_.begin(); it < cars_.end(); it++)
-    (*it)->run();
+  // Threads manage their own memory, so no need to keep their pointers.
+  for (unsigned i = 0; i < car_num_; i++)
+    (new Car(monitor_))->run();
   while (true)  {
-    psgs_.push_back(new Passenger(monitor_));
-    psgs_.back()->run();
+    (new Passenger(monitor_))->run();
     Thread::delay(psg_delay_);
   }
 }

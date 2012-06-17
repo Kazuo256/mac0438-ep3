@@ -95,7 +95,6 @@ static void handle (int sig) {
 
 void run () {
   signal(SIGINT, handle);
-  rollercoaster->open();
   //rollercoaster->test();
   rollercoaster->run();
 }
