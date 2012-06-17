@@ -8,6 +8,8 @@
 
 namespace ep3 {
 
+using std::string;
+
 void RollerCoasterMonitor::pegaCarona (const Passenger* psg) {
   Mutex::Lock lock(mutex_);
   // Warn cars that there are more passengers waiting.
@@ -16,23 +18,21 @@ void RollerCoasterMonitor::pegaCarona (const Passenger* psg) {
   else
     signal(waiting_psgs_);
   // Output.
-  Log()
-    .line("## Passenger "+psg->info()+" is arriving at the queue.");
-  report();
+  report("Passenger "+psg->info()+" is arriving at the queue.");
   // Wait for an available car.
   wait(available_car_, psg->golden() ? 0 : 1);
   // Wait for the ride to end.
   wait(ride_end_);
 }
 
-void RollerCoasterMonitor::carrega (unsigned car_id) {
+void RollerCoasterMonitor::carrega (Car* car) {
   Mutex::Lock lock(mutex_);
   // Make sure to be the next car to load.
   if (loading_car_)
     wait(loading_cars_);
   else
     loading_car_ = true;
-  Log().debug("Car #"+utos(car_id)+" is waiting for passengers.");
+  Log().debug(car->info()+" is waiting for passengers.");
   // Wait for enough passengers to arrive.
   for (unsigned i = 0; i < car_cap_; i++)
     if (waiting_psgs_count_ == 0)
@@ -42,7 +42,7 @@ void RollerCoasterMonitor::carrega (unsigned car_id) {
   // Let enough passengers in.
   for (unsigned i = 0; i < car_cap_; i++)
     signal(available_car_);
-  Log().debug("Car #"+utos(car_id)+" is full.");
+  Log().debug(car->info()+" is full.");
   // Let the next car load.
   if (empty(loading_cars_))
     loading_car_ = false;
@@ -50,15 +50,13 @@ void RollerCoasterMonitor::carrega (unsigned car_id) {
     signal(loading_cars_);
 }
 
-void RollerCoasterMonitor::descarrega (unsigned car_id) {
+void RollerCoasterMonitor::descarrega (Car* car) {
   Mutex::Lock lock(mutex_);
   // Make sure the car wasn't outrunned.
-  while (cars_riding_.front() != car_id)
+  while (cars_riding_.front() != car->id())
     wait(riding_order_);
   cars_riding_.pop();
-  Log()
-    .line("## Car "+utos(car_id)+" has finished its ride.");
-  report();
+  report("Car "+car->info()+" has finished its ride.");
   // Warn the others.
   signal_all(riding_order_);
   // Let the passengers leave.
@@ -66,19 +64,22 @@ void RollerCoasterMonitor::descarrega (unsigned car_id) {
     signal(ride_end_);
 }
 
-void RollerCoasterMonitor::ride (unsigned car_id) {
+void RollerCoasterMonitor::ride (Car* car) {
   // RIDE!
   Mutex::Lock lock(mutex_);
-  cars_riding_.push(car_id);
-  Log()
-    .line("## Car "+utos(car_id)+" is now riding.");
-  report();
+  cars_riding_.push(car->id());
+  report("Car "+car->info()+" is now riding.");
 }
 
-void RollerCoasterMonitor::report () const {
+void RollerCoasterMonitor::report (const string& title) const {
   Log()
-    .line("## Passengers currently waiting: "+utos(count(available_car_))+".");
+    .line("Reporting: "+title)
+    .line("Simulation status:")
+    .line(" + Passengers currently waiting: "+utos(count(available_car_))+".");
   dump(available_car_);
+  Log()
+    .line(" + Cars currently riding: XX (of YY).")
+    .line();
 }
 
 } // namespace ep3

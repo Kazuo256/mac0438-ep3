@@ -5,7 +5,7 @@
 .temp/thread.o: src/thread.cxx src/thread.h src/mutex.h src/semaph.h \
  src/monitor.h src/log.h
 .temp/car.o: src/car.cxx src/car.h src/thread.h src/mutex.h \
- src/rollercoastermonitor.h src/monitor.h
+ src/rollercoastermonitor.h src/monitor.h src/log.h
 .temp/ep3.o: src/ep3.cxx src/ep3.h src/rollercoaster.h src/thread.h \
  src/mutex.h src/log.h
 .temp/rollercoaster.o: src/rollercoaster.cxx src/rollercoaster.h \

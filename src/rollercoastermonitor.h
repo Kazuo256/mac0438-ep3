@@ -2,6 +2,7 @@
 #ifndef EP3_ROLLERCOASTERMONITOR_H_
 #define EP3_ROLLERCOASTERMONITOR_H_
 
+#include <string>
 #include <vector>
 #include <queue>
 
@@ -25,9 +26,9 @@ class RollerCoasterMonitor : public Monitor {
     // ENUNCIADO:                           //
     // <<================================>> //
     void pegaCarona (const Passenger* psg);
-    void carrega (unsigned car_id);
-    void descarrega (unsigned car_id);
-    void ride (unsigned car_id);
+    void carrega (Car* car);
+    void descarrega (Car* car);
+    void ride (Car* car);
     // <<================================>> //
   private:
     unsigned              car_cap_;
@@ -52,7 +53,7 @@ class RollerCoasterMonitor : public Monitor {
     std::queue<unsigned>  cars_riding_;
     CondVar               riding_order_;
     // Reports roller coaster state.
-    void report () const;
+    void report (const std::string& title) const;
 };
 
 } // namespace ep3
