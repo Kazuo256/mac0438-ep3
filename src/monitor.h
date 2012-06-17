@@ -30,6 +30,7 @@ class Monitor {
     void signal_all (CondVar& cv);
     Thread* signal_and_fetch (CondVar& cv);
     Rank minrank (const CondVar& cv) const;
+    unsigned count (const CondVar& cv) const;
     void dump (const CondVar& cv) const;
     // Maximum possible rank.
     static const Rank MAXRANK = static_cast<Rank>(-1);
@@ -51,6 +52,7 @@ class Monitor::CondVar {
     Rank minrank () const { return minrank_; }
     void push (Thread *thread, Rank rank = 0);
     void pop ();
+    size_t size () const;
     void dump () const;
   private:
     std::vector< std::list<Thread*> > ranks_;

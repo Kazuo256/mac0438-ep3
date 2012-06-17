@@ -2,14 +2,12 @@
 #include "monitor.h"
 
 #include <algorithm>
-#include <string>
 
 #include "log.h"
 #include "semaph.h"
 
 namespace ep3 {
 
-using std::string;
 using std::vector;
 using std::list;
 using std::map;
@@ -75,6 +73,10 @@ Monitor::Rank Monitor::minrank (const CondVar& cv) const {
   return cv.minrank();
 }
 
+unsigned Monitor::count (const CondVar& cv) const {
+  return cv.size();
+}
+
 void Monitor::dump (const CondVar& cv) const {
   cv.dump();
 }
@@ -109,18 +111,23 @@ void Monitor::CondVar::pop () {
     //Log().debug("Up rank "+utos(++minrank_));
 }
 
+size_t Monitor::CondVar::size () const {
+  size_t total = 0;
+  for (unsigned i = minrank_; i < ranks_.size(); i++)
+    total += ranks_[i].size();
+  return total;
+}
+
 void Monitor::CondVar::dump () const {
-  string output;
   vector< list<Thread*> >::const_iterator r_it;
   for (r_it = ranks_.begin(); r_it < ranks_.end(); r_it++) {
     list<Thread*>::const_iterator t_it;
     unsigned                      count;
     for (t_it = r_it->begin(), count = 0; t_it != r_it->end(); t_it++, count++)
-      output +=
-        "\t("+utos(r_it-ranks_.begin())+":"+utos(count)+")\t"+
-        (*t_it)->info() + '\n';
+      Log().line(
+        "\t("+utos(r_it-ranks_.begin())+":"+utos(count)+")\t"+(*t_it)->info()
+      );
   }
-  Log().line(output);
 }
 
 } // namespace ep3
