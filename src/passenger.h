@@ -19,6 +19,7 @@ class Passenger : public Thread {
     RollerCoasterMonitor  *monitor_;
     unsigned              id_;
     bool                  golden_ticket_;
+    unsigned              ride_num_;
     static unsigned       next_id_;
 };
 

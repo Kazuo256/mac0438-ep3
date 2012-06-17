@@ -1,7 +1,6 @@
 
 #include "car.h"
 
-#include <cstdlib>
 #include "rollercoastermonitor.h"
 #include "thread.h"
 

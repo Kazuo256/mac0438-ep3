@@ -1,6 +1,8 @@
 
 #include "passenger.h"
 
+#include <cstdlib>
+
 #include "rollercoastermonitor.h"
 #include "thread.h"
 #include "log.h"
@@ -14,17 +16,17 @@ unsigned Passenger::next_id_ = 0;
 Passenger::Passenger (RollerCoasterMonitor* monitor) :
   monitor_(monitor),
   id_(next_id_++),
-  golden_ticket_(false) {}
+  golden_ticket_(!(rand()&0x3)), // 25%
+  ride_num_(0) {}
 
 string Passenger::info () const {
-  return string("<passenger ")+(golden_ticket_?"D":"")+utos(id_)+":?>";
+  return
+    string("<psg ")+(golden_ticket_?"D":"")+utos(id_)+":"+utos(ride_num_)+">";
 }
 
 void Passenger::do_run () {
-  Log().line("Passenger (#"+utos(id_)+") appears!");
-  Log().line("Passenger (#"+utos(id_)+") first time.");
+  Log().debug(info()+" appears!");
   monitor_->pegaCarona(golden_ticket_);
-  Log().line("Passenger (#"+utos(id_)+") second time.");
   monitor_->pegaCarona(golden_ticket_);
 }
 
