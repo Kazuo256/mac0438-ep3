@@ -80,8 +80,10 @@ void RollerCoasterMonitor::report (const string& title) const {
     .line(" + Passengers currently waiting: "+utos(count(available_car_))+".");
   dump(available_car_);
   Log()
-    .line(" + Cars currently riding: XX (of YY).")
-    .line();
+    .line(" + Cars currently riding: "+utos(cars_riding_.size())+
+          " (of "+utos(Car::num())+").");
+  Car::dump_all();
+  Log().line();
 }
 
 } // namespace ep3

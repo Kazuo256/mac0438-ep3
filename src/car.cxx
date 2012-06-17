@@ -8,12 +8,16 @@
 namespace ep3 {
 
 using std::string;
+using std::vector;
 
-unsigned Car::next_id_ = 0;
+unsigned            Car::next_id_ = 0;
+vector<const Car*>  Car::cars_;
 
 Car::Car (RollerCoasterMonitor* monitor) :
   monitor_(monitor),
-  id_(next_id_++) {}
+  id_(next_id_++) {
+  cars_.push_back(this);
+}
 
 string Car::info () const {
   return "<car "+utos(id_)+">";
@@ -25,6 +29,14 @@ void Car::add_psg (const Thread* psg) {
 
 void Car::drop_psg () {
   psgs_.pop_front();
+}
+
+void Car::dump_all () {
+  Log().line("TODO");
+}
+
+unsigned Car::num () {
+  return cars_.size();
 }
 
 void Car::do_run () {
