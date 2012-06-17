@@ -2,6 +2,7 @@
 #ifndef EP3_PASSENGER_H_
 #define EP3_PASSENGER_H_
 
+#include <string>
 #include "thread.h"
 
 namespace ep3 {
@@ -11,8 +12,9 @@ class RollerCoasterMonitor;
 class Passenger : public Thread {
   public:
     Passenger (RollerCoasterMonitor* monitor);
+    std::string info () const;
   protected:
-    virtual void do_run ();
+    void do_run ();
   private:
     RollerCoasterMonitor  *monitor_;
     unsigned              id_;

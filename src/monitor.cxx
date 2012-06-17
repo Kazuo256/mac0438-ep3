@@ -2,12 +2,14 @@
 #include "monitor.h"
 
 #include <algorithm>
+#include <string>
 
 #include "log.h"
 #include "semaph.h"
 
 namespace ep3 {
 
+using std::string;
 using std::vector;
 using std::list;
 using std::map;
@@ -108,12 +110,14 @@ void Monitor::CondVar::pop () {
 }
 
 void Monitor::CondVar::dump () const {
+  string output;
   vector< list<Thread*> >::const_iterator r_it;
   for (r_it = ranks_.begin(); r_it < ranks_.end(); r_it++) {
     list<Thread*>::const_iterator t_it;
     for (t_it = r_it->begin(); t_it != r_it->end(); t_it++)
-      Log().line((*t_it)->info());
+      output += (*t_it)->info() + '\n';
   }
+  Log().line(output);
 }
 
 } // namespace ep3

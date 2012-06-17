@@ -52,8 +52,10 @@ void RollerCoasterMonitor::descarrega (unsigned car_id) {
     wait(riding_order_);
   cars_riding_.pop();
   Log().debug("Car #"+utos(car_id)+" has finished its lap.");
-    // Warn the others.
+  // Warn the others.
   signal_all(riding_order_);
+  // Dump info.
+  dump(available_car_);
   // Let the passengers leave.
   for (unsigned i = 0; i < car_cap_; i++)
     signal(ride_end_);
@@ -64,6 +66,7 @@ void RollerCoasterMonitor::ride (unsigned car_id) {
   Mutex::Lock lock(mutex_);
   cars_riding_.push(car_id);
   Log().debug("Car #"+utos(car_id)+" is now riding.");
+  dump(available_car_);
 }
 
 //void RollerCoasterMonitor::finish_lap (unsigned car_id) {
