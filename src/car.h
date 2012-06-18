@@ -20,6 +20,8 @@ class Car : public Thread {
     unsigned id () const { return id_; }
     void add_psg (const Thread* psg);
     void drop_psg (const Thread* psg);
+    void ride () { riding_ = true; }
+    void stop () { riding_ = false; }
     static void dump_all ();
     static unsigned num ();
   protected:
@@ -28,6 +30,7 @@ class Car : public Thread {
     RollerCoasterMonitor            *monitor_;
     unsigned                        id_;
     std::set<const Thread*>         psgs_;
+    bool                            riding_;
     static unsigned                 next_id_;
     static std::vector<const Car*>  cars_;
 };

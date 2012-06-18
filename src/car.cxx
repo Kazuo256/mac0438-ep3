@@ -16,7 +16,8 @@ vector<const Car*>  Car::cars_;
 
 Car::Car (RollerCoasterMonitor* monitor) :
   monitor_(monitor),
-  id_(next_id_++) {
+  id_(next_id_++),
+  riding_(false) {
   cars_.push_back(this);
 }
 
@@ -32,11 +33,15 @@ void Car::drop_psg (const Thread* psg) {
   psgs_.erase(psg);
 }
 
+static const char* riding_text (bool riding) {
+  return riding ? "riding" : "stopped";
+}
+
 void Car::dump_all () {
   vector<const Car*>::iterator cit;
   for (cit = cars_.begin(); cit < cars_.end(); cit++) {
-    Log().line("\tNumber of passengers at "+(*cit)->info()+": "+
-               utos((*cit)->psgs_.size())+".");
+    Log().line("\tCar "+(*cit)->info()+" is "+riding_text((*cit)->riding_)+". "
+              +"Number of passengers: "+utos((*cit)->psgs_.size())+".");
     const set<const Thread*>& psgs = (*cit)->psgs_;
     set<const Thread*>::const_iterator pit;
     for (pit = psgs.begin(); pit != psgs.end(); pit++)

@@ -80,7 +80,7 @@ IV. Modo de uso do programa.
     C         (unsigned int) Capacidade dos carros da montanha russa.
 
 
-V. Implementação da barreira simétrica.
+V. Implementação de monitor TODO
 
   O algoritmo da barreira simétrica usada no nosso EP se encontra no método
 Barrier::synchronize(id) da classe Barrier. Sua declaração está no arquivo

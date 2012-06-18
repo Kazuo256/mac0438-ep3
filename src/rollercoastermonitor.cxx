@@ -56,6 +56,7 @@ void RollerCoasterMonitor::descarrega (Car* car) {
   while (cars_riding_.front() != car->id())
     wait(riding_order_);
   cars_riding_.pop();
+  car->stop();
   report("Car "+car->info()+" has finished its ride.");
   // Warn the others.
   signal_all(riding_order_);
@@ -70,6 +71,7 @@ void RollerCoasterMonitor::ride (Car* car) {
   // RIDE!
   Mutex::Lock lock(mutex_);
   cars_riding_.push(car->id());
+  car->ride();
   report("Car "+car->info()+" is now riding.");
 }
 
