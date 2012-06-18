@@ -105,6 +105,12 @@ chamou tenha feito isso, pois elas não adquirem lock nenhum. Mas existem outras
 operações na classe Monitor que são de uso público e, portanto, adquirem a trava
 sozinhas (isso é, são thread-safe).
 
+VI. Informações úteis:
+
+  -)  Nossa unidade de tempo é de 100 milissegundos. Portanto, em geral os
+      carros levam 10 segundos para completar uma volta na montanha-russa.
+  -)  Há uma breve documentação no cabeçalho de cada classe e das principais
+      funções.
 
 
 

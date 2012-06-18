@@ -88,7 +88,7 @@ bool init (int argc, char** argv) {
 #include <signal.h>
 
 static void handle (int sig) {
-  Log().line("Interruption signal captured!");
+  Log().line("Interruption signal captured! Finishing simulation...");
   Thread::halt_threads();
   Thread::exit();
 }
