@@ -30,7 +30,9 @@ void Car::add_psg (const Thread* psg) {
 }
 
 void Car::drop_psg (const Thread* psg) {
-  psgs_.erase(psg);
+  Log().debug(info()+" is dropping passenger "+psg->info()+".");
+  if (!psgs_.erase(psg))
+    Log().warn(info()+" has no passenger "+psg->info()+".");
 }
 
 static const char* riding_text (bool riding) {

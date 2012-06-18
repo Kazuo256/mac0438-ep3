@@ -32,6 +32,7 @@ void Passenger::do_run () {
   monitor_->pegaCarona(this);
   ride_num_++;
   // Safely exits the simulation.
+  Log().debug(info()+" leaves the roller coaster for good.");
   monitor_->safe_exit(this);
 }
 

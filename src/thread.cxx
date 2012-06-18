@@ -66,16 +66,20 @@ void Thread::delay (float timedelay) {
 
 void* Thread::exit () {
   Thread *thread = NULL;
+  std::string thread_info;
   {
     Mutex::Lock lock(list_mutex_);
     List::iterator hit = get_thread(pthread_self());
     if (hit != threads_.end()) {
       thread = *hit;
+      thread_info = (*hit)->info();
       delete *hit;
       threads_.erase(hit);
     }
   }
-  Log().debug("Exiting thread "+ptos(thread)+".");
+  if (!thread_info.size())
+    thread_info = ptos(thread);
+  Log().debug("Exiting thread "+thread_info+".");
   pthread_exit(NULL);
   return NULL; // never reaches here
 }
@@ -84,11 +88,11 @@ void Thread::halt_threads () {
   Mutex::Lock lock(list_mutex_);
   List::iterator it;
   for (it = threads_.begin(); it != threads_.end(); it++) {
-    Log().debug("Canceling thread "+ptos(static_cast<void*>(&*it))+".");
+    Log().debug("Canceling thread "+(*it)->info()+".");
     pthread_cancel((*it)->thread_);
   }
   for (it = threads_.begin(); it != threads_.end(); it++) {
-    Log().debug("Deleting thread "+ptos(static_cast<void*>(&*it))+".");
+    Log().debug("Deleting thread "+(*it)->info()+".");
     delete *it;
   }
   threads_.clear();
