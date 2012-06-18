@@ -10,14 +10,13 @@ I. Organização dos arquivos.
 
   Nosso EP deve apresentar a seguinte organização de arquivos e pastas:
 
-    ep2-thiago-wilson/
+    ep3-thiago-wilson/
     |- Makefile
     |- objs.makefile
     |- deps.makefile
     |- CMakeLists.txt
     |- alternative_build.sh
     |- LEIAME
-    |- relatório.pdf
     |- src/
     |  |- main.cxx
     |  |- ...demais arquivos de código fonte...
@@ -46,18 +45,14 @@ seja necessário conferir permissão de execução ao script "alternative_build.
 III. Ferramentas usadas.
 
   Nosso Exercício-Programa foi escrito em C++ padrão, usando vários headers da
-STL convencional, a biblioteca PTHREAD para programação concorrente, e o header
-<unistd.h> para acessar o número de processadores disponíveis do sistema. Ou
-seja, assumimos que nosso programa será compilado e executado em um ambiente
-Linux. Em particular, o programa foi testado na Rede Linux do IME, e tanto
-compilou sem erros como executou corretamente usando o Makefile padrão que vem
-com o nosso código fonte.
+STL convencional, a biblioteca PTHREAD para programação concorrente, e o a
+biblioteca semaphore POSIX (do semaphore.h) para sincronização por semáforos.
 
 IV. Modo de uso do programa.
 
   Nosso programa segue a seguinte assinatura de linha de comando:
 
-    ./ep2 [-d] [-w] <t> <m> <C>
+    ./ep3 [-d] [-w] <t> <m> <C>
 
   Legenda:
 
@@ -67,7 +62,6 @@ IV. Modo de uso do programa.
 
     -d        Ativa modo de depuração, no qual várias mensagens contendo
               informações internas são exibidas durante a execução do programa.
-              Isso inclui as mensagens exigidas pelo enunciado.
 
     -w        Ativa o modo de alerta, no qual mensagens de alerta ou perigo são
               exibidas em situações extremas (como falha na criação das
@@ -80,14 +74,38 @@ IV. Modo de uso do programa.
     C         (unsigned int) Capacidade dos carros da montanha russa.
 
 
-V. Implementação de monitor TODO
+V. Implementação de monitor
 
-  O algoritmo da barreira simétrica usada no nosso EP se encontra no método
-Barrier::synchronize(id) da classe Barrier. Sua declaração está no arquivo
-src/barrier.h, linha 17, e sua implementação no arquivo src/barrier.cxx, linhas
-43 a 51.
-  Maiores informações sobre a implmentação usada podem ser encontradas no
-relatório.
+  A implementação do monitor está dividida em duas partes: a classe Monitor e a
+classe RollerCoasterMonitor, que herda da primeira. Elas podem ser encontradas
+nos arquivos monitor.h/cxx e rollercoastermonitor.h/cxx, respectivamente.
+  As operações básicas empty(cv), wait(cv), wait(cv,rank), signal(cv),
+signal_all(cv) e minrank(cv) estão na classe Monitor. São declaradas nas linhas
+28-32 do arquivo monitor.h, e implementadas nas linhas 43-79 do arquivo
+monitor.cxx. No caso, fizemos ambas as versões de 'wait' em um único método,
+cujo segundo parâmetro tem um valor padrão e portanto pode ser omitido quando
+chamado.
+  Alguns detalhes: as "variáveis de condição" são todas implementadas
+com suporte a prioridades, sendo passado ao seu construtor a quantidade de
+níveis de prioridade com o qual se quer que a variável trabalhe. Além disso,
+fizemos também as operações count(cv), que conta quantas threads estão esperando
+pela variável cv, e signal_and_fetch(cv), que não só acorda a próxima thread
+como também a devolve (caso não haja nenhuma ele devolve NULL). Todas essas
+operações básicas são protegidas, portanto apenas classes que herdam de Monitor
+podem usá-las diretamente.
+  As operaçoes 'pegaCarona', 'carrega' e 'descarrega' pertencem à classe
+RollerCoasterMonitor. São declaradas nas linhas 24-26 do arquivo
+rollercoastermonitor.h e implementadas nas linhas 13-68 do arquivo
+rollercoastermonitor.cxx. Acrescentamos também a operação 'ride', chamada pelos
+carros.
+  A o herdar da classe Monitor, fica a cargo da classe filha garantir a exclusão
+mútua em suas operações criando um lock para 'mutex_', um atributo protegido
+herdado. As operações básicas (wait, signal, ...) assumem que o método que as
+chamou tenha feito isso, pois elas não adquirem lock nenhum. Mas existem outras
+operações na classe Monitor que são de uso público e, portanto, adquirem a trava
+sozinhas (isso é, são thread-safe).
+
+
 
 
 

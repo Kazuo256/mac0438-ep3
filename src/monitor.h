@@ -29,8 +29,8 @@ class Monitor {
     void wait (CondVar& cv, Rank rank = MAXRANK);
     void signal (CondVar& cv);
     void signal_all (CondVar& cv);
-    Thread* signal_and_fetch (CondVar& cv);
     Rank minrank (const CondVar& cv) const;
+    Thread* signal_and_fetch (CondVar& cv);
     unsigned count (const CondVar& cv) const;
     void dump (const CondVar& cv) const;
     // Maximum possible rank.

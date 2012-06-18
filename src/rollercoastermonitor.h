@@ -21,15 +21,10 @@ class RollerCoasterMonitor : public Monitor {
       waiting_psgs_count_(0),
       available_car_(2),
       loading_car_(false) {}
-    // <<================================>> //
-    // AQUI ESTÃO AS OPERAÇÕES EXIGIDAS NO  //
-    // ENUNCIADO:                           //
-    // <<================================>> //
     void pegaCarona (const Passenger* psg);
     void carrega (Car* car);
     void descarrega (Car* car);
     void ride (Car* car);
-    // <<================================>> //
   private:
     unsigned              car_cap_;
     // These two are used as a semaphore between the incoming passengers and
