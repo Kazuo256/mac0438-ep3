@@ -49,6 +49,7 @@ class Monitor {
     Rank minrank (const CondVar& cv) const;
     Thread* signal_and_fetch (CondVar& cv);
     unsigned count (const CondVar& cv) const;
+    // Outputs the condition variable's list of waiting threads.
     void dump (const CondVar& cv) const;
     // Maximum possible rank.
     static const Rank MAXRANK = static_cast<Rank>(-1);

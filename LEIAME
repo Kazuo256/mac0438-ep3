@@ -81,7 +81,7 @@ classe RollerCoasterMonitor, que herda da primeira. Elas podem ser encontradas
 nos arquivos monitor.h/cxx e rollercoastermonitor.h/cxx, respectivamente.
   As operações básicas empty(cv), wait(cv), wait(cv,rank), signal(cv),
 signal_all(cv) e minrank(cv) estão na classe Monitor. São declaradas nas linhas
-28-32 do arquivo monitor.h, e implementadas nas linhas 43-79 do arquivo
+43-51 do arquivo monitor.h, e implementadas nas linhas 43-85 do arquivo
 monitor.cxx. No caso, fizemos ambas as versões de 'wait' em um único método,
 cujo segundo parâmetro tem um valor padrão e portanto pode ser omitido quando
 chamado.
@@ -92,7 +92,8 @@ fizemos também as operações count(cv), que conta quantas threads estão esper
 pela variável cv, e signal_and_fetch(cv), que não só acorda a próxima thread
 como também a devolve (caso não haja nenhuma ele devolve NULL). Todas essas
 operações básicas são protegidas, portanto apenas classes que herdam de Monitor
-podem usá-las diretamente.
+podem usá-las diretamente. Ambas essas operações adicionais estão inclusas na
+contagem de linhas citada no parágrafo anterior.
   As operaçoes 'pegaCarona', 'carrega' e 'descarrega' pertencem à classe
 RollerCoasterMonitor. São declaradas nas linhas 28-31 do arquivo
 rollercoastermonitor.h e implementadas nas linhas 13-81 do arquivo
