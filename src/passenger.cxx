@@ -16,7 +16,7 @@ unsigned Passenger::next_id_ = 0;
 Passenger::Passenger (RollerCoasterMonitor* monitor) :
   monitor_(monitor),
   id_(next_id_++),
-  golden_ticket_(!(rand()&0x3)), // 25%
+  golden_ticket_(!(rand()&0x3)), // 25% chance. Sry for ugly code.
   ride_num_(0) {}
 
 string Passenger::info () const {
@@ -26,11 +26,13 @@ string Passenger::info () const {
 
 void Passenger::do_run () {
   Log().debug(info()+" appears!");
+  // Ride the roller coaster twice.
   monitor_->pegaCarona(this);
   ride_num_++;
   monitor_->pegaCarona(this);
   ride_num_++;
-  monitor_->gtfo(this);
+  // Safely exits the simulation.
+  monitor_->safe_exit(this);
 }
 
 } // namespace ep3

@@ -23,6 +23,8 @@ Monitor::~Monitor () {
   }
 }
 
+//== Public operations: ==//
+
 void Monitor::drop (Thread* thread) {
   Mutex::Lock lock(mutex_);
   Log().debug("Droping thread "+ptos(static_cast<void*>(thread))+".");
@@ -33,12 +35,12 @@ void Monitor::drop (Thread* thread) {
   }
 }
 
-void Monitor::gtfo (Thread* thread) {
+void Monitor::safe_exit (Thread* thread) {
   Mutex::Lock lock(mutex_);
   Thread::exit();
 }
 
-//===//
+//== Protected basic operations: ==//
 
 bool Monitor::empty (const CondVar& cv) const {
   return cv.empty();
@@ -94,6 +96,8 @@ Semaph* Monitor::get_semaph (Thread* thread) {
     return (monitoring_map_[thread] = new Semaph(0));
   }
 }
+
+//== CondVar methods: ==//
 
 bool Monitor::CondVar::empty () const {
   return minrank_ >= ranks_.size();

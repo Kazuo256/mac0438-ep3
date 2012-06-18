@@ -13,14 +13,18 @@ namespace ep3 {
 class Car;
 class Passenger;
 
+// Roller Coaster's monitor class. Inherits from Monitor and implements the
+// operations "pegaCarona", "descarrega", "descarrega", and also "ride".
+// There are a lot a condition variables so they are explained with more detail.
 class RollerCoasterMonitor : public Monitor {
   public:
     RollerCoasterMonitor (unsigned car_cap) :
       Monitor(),
       car_cap_(car_cap),
       waiting_psgs_count_(0),
-      available_car_(2),
+      available_car_(2), // only condition variable the 2 priority levels
       loading_car_(false) {}
+    // The main synchronization operations for the simulation.
     void pegaCarona (const Passenger* psg);
     void carrega (Car* car);
     void descarrega (Car* car);
@@ -38,7 +42,7 @@ class RollerCoasterMonitor : public Monitor {
     CondVar               available_car_;
     // A passenger uses this to know when the ride has ended. 
     CondVar               ride_end_;
-    // There form yet another semaphore, though a binary one this time. It
+    // These form yet another semaphore, though a binary one this time. It
     // basically certifies that only one car at a time is loading passengers.
     bool                  loading_car_;
     CondVar               loading_cars_;

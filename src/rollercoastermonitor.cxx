@@ -10,6 +10,10 @@ namespace ep3 {
 
 using std::string;
 
+// We seriously hope the code here is as legible as it can be.
+// There are quite a few condition variables, so keep track of their purposes
+// by referring to their documentation in the header.
+
 void RollerCoasterMonitor::pegaCarona (const Passenger* psg) {
   Mutex::Lock lock(mutex_);
   // Warn cars that there are more passengers waiting.
@@ -17,7 +21,7 @@ void RollerCoasterMonitor::pegaCarona (const Passenger* psg) {
     waiting_psgs_count_++;
   else
     signal(waiting_psgs_);
-  // Output.
+  // Report passenger arrival.
   report("Passenger "+psg->info()+" is arriving at the queue.");
   // Wait for an available car.
   wait(available_car_, psg->golden() ? 0 : 1);
@@ -55,23 +59,24 @@ void RollerCoasterMonitor::descarrega (Car* car) {
   // Make sure the car wasn't outrunned.
   while (cars_riding_.front() != car->id())
     wait(riding_order_);
+  // Now the car isn't riding anymore.
   cars_riding_.pop();
   car->stop();
+  // Report car's ride end.
   report("Car "+car->info()+" has finished its ride.");
-  // Warn the others.
+  // Warn the other riding cars that the order has been updated.
   signal_all(riding_order_);
   // Let the passengers leave.
-  for (unsigned i = 0; i < car_cap_; i++) {
+  for (unsigned i = 0; i < car_cap_; i++)
     car->drop_psg(signal_and_fetch(ride_end_));
-    //signal(ride_end_);
-  }
 }
 
 void RollerCoasterMonitor::ride (Car* car) {
-  // RIDE!
   Mutex::Lock lock(mutex_);
+  // RIDE!
   cars_riding_.push(car->id());
   car->ride();
+  // Report car's departure.
   report("Car "+car->info()+" is now riding.");
 }
 

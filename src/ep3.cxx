@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <memory>
+#include <signal.h>
 
 #include "rollercoaster.h"
 #include "thread.h"
@@ -14,9 +15,10 @@ using std::string;
 using std::auto_ptr;
 
 // Smart pointer to the roller coaster. Automatically deletes the monitor at the
-// end of the program.
+// end of execution.
 static auto_ptr<RollerCoaster>  rollercoaster(NULL);
 
+// Prints help.
 static void help (const string& progname) {
   Log()
     .line("Usage:")
@@ -85,17 +87,18 @@ bool init (int argc, char** argv) {
   return true;
 }
 
-#include <signal.h>
-
+// Handler for interruption signal.
 static void handle (int sig) {
   Log().line("Interruption signal captured! Finishing simulation...");
+  // Stop everyone.
   Thread::halt_threads();
   Thread::exit();
 }
 
 void run () {
+  // Set interruption signal handler.
   signal(SIGINT, handle);
-  //rollercoaster->test();
+  // Run the simulation.
   rollercoaster->run();
 }
 

@@ -94,10 +94,10 @@ como também a devolve (caso não haja nenhuma ele devolve NULL). Todas essas
 operações básicas são protegidas, portanto apenas classes que herdam de Monitor
 podem usá-las diretamente.
   As operaçoes 'pegaCarona', 'carrega' e 'descarrega' pertencem à classe
-RollerCoasterMonitor. São declaradas nas linhas 24-26 do arquivo
-rollercoastermonitor.h e implementadas nas linhas 13-68 do arquivo
+RollerCoasterMonitor. São declaradas nas linhas 28-31 do arquivo
+rollercoastermonitor.h e implementadas nas linhas 13-81 do arquivo
 rollercoastermonitor.cxx. Acrescentamos também a operação 'ride', chamada pelos
-carros.
+carros e que está incluída nas linhas citadas.
   A o herdar da classe Monitor, fica a cargo da classe filha garantir a exclusão
 mútua em suas operações criando um lock para 'mutex_', um atributo protegido
 herdado. As operações básicas (wait, signal, ...) assumem que o método que as

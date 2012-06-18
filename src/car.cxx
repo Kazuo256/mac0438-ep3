@@ -54,6 +54,7 @@ unsigned Car::num () {
 }
 
 void Car::do_run () {
+  // Stops only upon thread cancelation.
   while (true) {
     monitor_->carrega(this);
     monitor_->ride(this);

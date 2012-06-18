@@ -10,11 +10,12 @@ using ep3::Log;
 using ep3::Thread;
 
 int main (int argc, char** argv) {
+  // Read command line parameters.
   if (!ep3::init(argc, argv)) {
     Log().line("Failed to initialize program. Exiting.");
-  } else ep3::run();
+  } else ep3::run(); // Run program upon sucess.
   Thread::exit();
-  // never reaches here
+  // Never reaches here
   return EXIT_FAILURE;
 }
 

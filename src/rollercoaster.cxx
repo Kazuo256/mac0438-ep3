@@ -28,11 +28,13 @@ RollerCoaster::~RollerCoaster () {
 }
 
 void RollerCoaster::run () {
+  // To randomize which passengers get golden tickets.
   srand(time(NULL));
   Log().line("== Starting roller coaster ==");
   // Threads manage their own memory, so no need to keep their pointers.
   for (unsigned i = 0; i < car_num_; i++)
     (new Car(monitor_))->run();
+  // Keeps creating passengers until the main thread is interrupted.
   while (true)  {
     (new Passenger(monitor_))->run();
     Thread::delay(psg_delay_);

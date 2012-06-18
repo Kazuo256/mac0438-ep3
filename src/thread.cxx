@@ -33,6 +33,7 @@ Thread::~Thread () {
 }
 
 string Thread::info () const {
+  // Default information given.
   return "<"+ptos(static_cast<const void*>(this))+">";
 }
 
@@ -103,14 +104,8 @@ Thread::List::iterator Thread::get_thread (const pthread_t& t) {
 void* Thread::routine (void* args) {
   Thread *self = static_cast<Thread*>(args);
   pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
-  //pthread_cleanup_push(&cleanup, args);
   self->do_run();
-  //pthread_cleanup_pop(0);
   return Thread::exit();
-}
-
-void Thread::cleanup (void* args) {
-  delete static_cast<Thread*>(args);
 }
 
 } // namespace ep3
