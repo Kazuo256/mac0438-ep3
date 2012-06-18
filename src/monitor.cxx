@@ -33,6 +33,11 @@ void Monitor::drop (Thread* thread) {
   }
 }
 
+void Monitor::gtfo (Thread* thread) {
+  Mutex::Lock lock(mutex_);
+  Thread::exit();
+}
+
 //===//
 
 bool Monitor::empty (const CondVar& cv) const {
@@ -108,7 +113,6 @@ void Monitor::CondVar::pop () {
   ranks_[minrank_].pop_front();
   while (minrank_ < ranks_.size() && ranks_[minrank_].empty())
     minrank_++;
-    //Log().debug("Up rank "+utos(++minrank_));
 }
 
 size_t Monitor::CondVar::size () const {

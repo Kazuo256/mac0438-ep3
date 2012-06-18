@@ -9,7 +9,7 @@ namespace ep3 {
 
 using std::string;
 using std::vector;
-using std::list;
+using std::set;
 
 unsigned            Car::next_id_ = 0;
 vector<const Car*>  Car::cars_;
@@ -25,11 +25,11 @@ string Car::info () const {
 }
 
 void Car::add_psg (const Thread* psg) {
-  psgs_.push_back(psg);
+  psgs_.insert(psg);
 }
 
-void Car::drop_psg () {
-  psgs_.pop_front();
+void Car::drop_psg (const Thread* psg) {
+  psgs_.erase(psg);
 }
 
 void Car::dump_all () {
@@ -37,8 +37,8 @@ void Car::dump_all () {
   for (cit = cars_.begin(); cit < cars_.end(); cit++) {
     Log().line("\tNumber of passengers at "+(*cit)->info()+": "+
                utos((*cit)->psgs_.size())+".");
-    const list<const Thread*>& psgs = (*cit)->psgs_;
-    list<const Thread*>::const_iterator pit;
+    const set<const Thread*>& psgs = (*cit)->psgs_;
+    set<const Thread*>::const_iterator pit;
     for (pit = psgs.begin(); pit != psgs.end(); pit++)
       Log().line("\t\t"+(*pit)->info());
   }

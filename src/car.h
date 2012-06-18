@@ -4,7 +4,7 @@
 
 #include <string>
 #include <vector>
-#include <list>
+#include <set>
 
 #include "thread.h"
 #include "mutex.h"
@@ -19,7 +19,7 @@ class Car : public Thread {
     std::string info () const;
     unsigned id () const { return id_; }
     void add_psg (const Thread* psg);
-    void drop_psg ();
+    void drop_psg (const Thread* psg);
     static void dump_all ();
     static unsigned num ();
   protected:
@@ -27,7 +27,7 @@ class Car : public Thread {
   private:
     RollerCoasterMonitor            *monitor_;
     unsigned                        id_;
-    std::list<const Thread*>        psgs_;
+    std::set<const Thread*>         psgs_;
     static unsigned                 next_id_;
     static std::vector<const Car*>  cars_;
 };

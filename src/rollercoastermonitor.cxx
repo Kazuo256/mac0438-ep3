@@ -61,8 +61,8 @@ void RollerCoasterMonitor::descarrega (Car* car) {
   signal_all(riding_order_);
   // Let the passengers leave.
   for (unsigned i = 0; i < car_cap_; i++) {
-    car->drop_psg();
-    signal(ride_end_);
+    car->drop_psg(signal_and_fetch(ride_end_));
+    //signal(ride_end_);
   }
 }
 

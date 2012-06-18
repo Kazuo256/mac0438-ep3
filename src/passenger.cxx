@@ -30,6 +30,7 @@ void Passenger::do_run () {
   ride_num_++;
   monitor_->pegaCarona(this);
   ride_num_++;
+  monitor_->gtfo(this);
 }
 
 } // namespace ep3

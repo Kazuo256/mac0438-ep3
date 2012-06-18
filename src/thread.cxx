@@ -86,6 +86,10 @@ void Thread::halt_threads () {
     Log().debug("Canceling thread "+ptos(static_cast<void*>(&*it))+".");
     pthread_cancel((*it)->thread_);
   }
+  for (it = threads_.begin(); it != threads_.end(); it++) {
+    Log().debug("Deleting thread "+ptos(static_cast<void*>(&*it))+".");
+    delete *it;
+  }
   threads_.clear();
 }
 
@@ -98,9 +102,10 @@ Thread::List::iterator Thread::get_thread (const pthread_t& t) {
 
 void* Thread::routine (void* args) {
   Thread *self = static_cast<Thread*>(args);
-  pthread_cleanup_push(&cleanup, args);
+  pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+  //pthread_cleanup_push(&cleanup, args);
   self->do_run();
-  pthread_cleanup_pop(0);
+  //pthread_cleanup_pop(0);
   return Thread::exit();
 }
 
