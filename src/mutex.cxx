@@ -17,11 +17,6 @@ void Mutex::lock () {
   mutex_->wait();
 }
 
-//void Mutex::try_lock () {
-//  if (pthread_mutex_trylock(&mutex_))
-//    Log().warn("Mutesx Busy.");
-//}
-
 void Mutex::unlock () {
   mutex_->post();
 }

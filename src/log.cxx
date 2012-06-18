@@ -8,6 +8,9 @@ using std::string;
 unsigned  Log::flags_;
 Mutex     Log::mutex_;
 
+// obs: numbers, be they integrals, floating-point or hexadecimals, can't
+//      really make strings greater than 20 caracters or so.
+
 string itos (int i) {
   char buffer[32];
   sprintf(buffer, "%d", i);

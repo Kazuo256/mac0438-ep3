@@ -9,10 +9,16 @@
 
 namespace ep3 {
 
+// These are some helpful functions. They follow the atoi-itoa naming pattern.
+// Except that in this case they convert to C++ strings, from integer, unsigned
+// and pointer, respectively.
 std::string itos (int i);
 std::string utos (unsigned i);
 std::string ptos (const void* p);
 
+// This class is used to log information about the program's execution.
+// It has supports outputing debug and warning info separetedly, as long as
+// their respective flags are activated.
 class Log {
   public:
     explicit Log (FILE *output = stdout) : output_(output) {}
