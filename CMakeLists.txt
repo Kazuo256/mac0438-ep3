@@ -14,10 +14,14 @@ add_executable (ep3
   src/main.cxx
   src/ep3.cxx
   src/log.cxx
-  src/monitor.cxx
   src/thread.cxx
-  src/mutex.cxx
   src/semaph.cxx
+  src/mutex.cxx
+  src/monitor.cxx
+  src/car.cxx
+  src/passenger.cxx
+  src/rollercoastermonitor.cxx
+  src/rollercoaster.cxx
 )
 
 target_link_libraries (ep3 m ${CMAKE_THREAD_LIBS_INIT})
