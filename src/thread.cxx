@@ -59,8 +59,8 @@ Thread* Thread::self () {
 
 void Thread::delay (float timedelay) {
   struct timespec t;
-  t.tv_sec = static_cast<time_t>(timedelay/10.0f);
-  t.tv_nsec = static_cast<long>(1e8f*fmod(timedelay, 10.0f));
+  t.tv_sec = static_cast<time_t>(timedelay/100.0f);
+  t.tv_nsec = static_cast<long>(1e7f*fmod(timedelay, 100.0f));
   nanosleep(&t, NULL);
 }
 

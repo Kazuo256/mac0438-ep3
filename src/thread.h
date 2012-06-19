@@ -30,7 +30,7 @@ class Thread {
     // Returns the current thread. Not very efficient.
     static Thread* self ();
     // Delays the current thread by 'timedelay' time units. A time unit is
-    // equivalent to 100 miliseconds.
+    // equivalent to 10 miliseconds.
     static void delay (float timedelay);
     // Exits the current thread. Even the main thread should use this.
     static void* exit ();

@@ -106,13 +106,17 @@ chamou tenha feito isso, pois elas não adquirem lock nenhum. Mas existem outras
 operações na classe Monitor que são de uso público e, portanto, adquirem a trava
 sozinhas (isso é, são thread-safe).
 
-VI. Informações úteis:
+VI. Outras informações úteis ou importantes:
 
-  -)  Nossa unidade de tempo é de 100 milissegundos. Portanto, em geral os
-      carros levam 10 segundos para completar uma volta na montanha-russa.
+  -)  Nossa unidade de tempo é de 10 milissegundos. Portanto, em geral os
+      carros levam 1 segundo para completar uma volta na montanha-russa.
   -)  Há uma breve documentação no cabeçalho de cada classe e das principais
       funções.
-
+  -)  Às vezes o programa demora para encerrar após uma interrupção (cerca de
+      um ou dois segundos). Isso é devido à espera pelo término das atividades
+      imediatas das threads, portanto é um comportamente esperado. Porém, se ele
+      demorar muito mais do que isso, então algum erro que não fomos capazes de
+      detectar deve ter ocorrido.
 
 
 
