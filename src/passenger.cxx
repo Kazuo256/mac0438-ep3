@@ -4,6 +4,7 @@
 #include <cstdlib>
 
 #include "rollercoastermonitor.h"
+#include "car.h"
 #include "thread.h"
 #include "log.h"
 
@@ -17,7 +18,8 @@ Passenger::Passenger (RollerCoasterMonitor* monitor) :
   monitor_(monitor),
   id_(next_id_++),
   golden_ticket_(!(rand()&0x3)), // 25% chance. Sry for ugly code.
-  ride_num_(0) {}
+  ride_num_(0),
+  current_car_(NULL) {}
 
 string Passenger::info () const {
   return

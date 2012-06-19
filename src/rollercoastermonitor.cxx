@@ -26,7 +26,7 @@ void RollerCoasterMonitor::pegaCarona (const Passenger* psg) {
   // Wait for an available car.
   wait(available_car_, psg->golden() ? 0 : 1);
   // Wait for the ride to end.
-  wait(ride_end_);
+  wait(ride_end_[psg->current_car()]);
 }
 
 void RollerCoasterMonitor::carrega (Car* car) {
@@ -44,8 +44,14 @@ void RollerCoasterMonitor::carrega (Car* car) {
     else
       waiting_psgs_count_--;
   // Let enough passengers in.
-  for (unsigned i = 0; i < car_cap_; i++)
-    car->add_psg(signal_and_fetch(available_car_));
+  for (unsigned i = 0; i < car_cap_; i++) {
+    Thread *t = signal_and_fetch(available_car_);
+    Passenger *psg = dynamic_cast<Passenger*>(t);
+    if (psg) {
+      psg->set_current_car(car);
+      car->add_psg(psg);
+    } else Log().warn("Unknown thread "+t->info()+" tried to board a car.");
+  }
   Log().debug(car->info()+" is full.");
   // Let the next car load.
   if (empty(loading_cars_))
@@ -67,8 +73,15 @@ void RollerCoasterMonitor::descarrega (Car* car) {
   // Warn the other riding cars that the order has been updated.
   signal_all(riding_order_);
   // Let the passengers leave.
-  for (unsigned i = 0; i < car_cap_; i++)
-    car->drop_psg(signal_and_fetch(ride_end_));
+  CondVar &cv = ride_end_[car];
+  for (unsigned i = 0; i < car_cap_; i++) {
+    Thread *t = signal_and_fetch(cv);
+    Passenger *psg = dynamic_cast<Passenger*>(t);
+    if (psg) {
+      psg->set_current_car(NULL);
+      car->drop_psg(psg);
+    } else Log().warn("Unknown thread "+t->info()+" tried to leave a car.");
+  }
 }
 
 void RollerCoasterMonitor::ride (Car* car) {
@@ -78,6 +91,10 @@ void RollerCoasterMonitor::ride (Car* car) {
   car->ride();
   // Report car's departure.
   report("Car "+car->info()+" is now riding.");
+}
+
+void RollerCoasterMonitor::register_car (const Car* car) {
+  ride_end_[car] = CondVar();
 }
 
 void RollerCoasterMonitor::report (const string& title) const {
